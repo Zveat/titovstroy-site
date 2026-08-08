@@ -647,6 +647,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 /* Нажатие на карточку на телефоне: тактильный отклик вместо наклона */
 @media(hover:none){.tilt:active{transform:scale(.985);transition:transform .12s}}
 
+/* 12. Маркер по заголовку. Латунная заливка прочерчивается слева направо, текст
+   под ней темнеет. Ничего не сдвигает: padding погашен отрицательным margin,
+   box-decoration-break склеивает заливку на переносе строки. */
+.hl{background-image:linear-gradient(var(--brass),var(--brass));background-repeat:no-repeat;
+  background-size:0 100%;background-position:0 50%;
+  padding:.02em .14em;margin:0 -.14em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  transition:background-size .8s cubic-bezier(.22,.8,.2,1),color .25s .4s}
+.rv.in .hl,.head.in .hl{background-size:100% 100%;color:#0A0D12}
+
 /* Подчёркивание у пунктов меню растёт из центра, а не слева */
 .hdr-nav a::after{left:50%;right:50%;transition:left .28s,right .28s}
 .hdr-nav a:hover::after{left:0;right:0}
@@ -1693,6 +1703,26 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    на телефоне наклон бессмысленен и только тратит кадры. */
 (function () {
   var fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
+
+  /* ── Маркер по заголовкам ── */
+  /* Подсвечиваем ДВА последних слова: приём читается как акцент, а не как
+     сплошная заливка. Разметку не дублируем — оборачиваем существующий текст,
+     поэтому для поиска и скринридера ничего не меняется. */
+  document.querySelectorAll(".head h2, h2.d2").forEach(function (h) {
+    if (h.querySelector(".hl")) return;
+    var last = null;
+    for (var i = h.childNodes.length - 1; i >= 0; i--) {
+      if (h.childNodes[i].nodeType === 3 && h.childNodes[i].nodeValue.trim()) { last = h.childNodes[i]; break; }
+    }
+    if (!last) return;
+    var w = last.nodeValue.replace(/\s+$/, "").split(" ");
+    if (w.length < 2) return;
+    var tail = w.slice(-2).join(" "), headTxt = w.slice(0, -2).join(" ");
+    var span = document.createElement("span");
+    span.className = "hl"; span.textContent = tail;
+    last.nodeValue = headTxt ? headTxt + " " : "";
+    last.parentNode.insertBefore(span, last.nextSibling);
+  });
 
   /* ── Наклон за курсором ── */
   var cards = document.querySelectorAll(".dir, .pc, .vid, .case-b, .magnet");
