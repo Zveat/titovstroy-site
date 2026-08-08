@@ -615,7 +615,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
 /* Наклон карточки за курсором + блик. Даёт объём, но не смещает соседей. */
 @media(hover:hover) and (pointer:fine){
-  .tilt{transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+  .tilt{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
   .tilt.tilting{transition:transform .08s linear}
   .tilt::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
     opacity:0;transition:opacity .3s;
@@ -642,11 +642,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
                      50%{box-shadow:0 16px 46px -12px rgba(224,180,98,.92)}}
 }
 
-/* Ступенчатое появление: элементы внутри блока встают по очереди, а не пачкой */
-.js .stg>*{opacity:0;transform:translateY(18px);
-  transition:opacity .62s cubic-bezier(.2,.8,.2,1),transform .62s cubic-bezier(.2,.8,.2,1)}
-.js .stg.in>*{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.js .stg>*{opacity:1;transform:none;transition:none}}
+/* Ступенчатости своей не добавляем: у блоков уже есть встроенные задержки
+   rv-d1…rv-d4, и второй источник задержек ломал раскладку карточек. */
+/* Нажатие на карточку на телефоне: тактильный отклик вместо наклона */
+@media(hover:none){.tilt:active{transform:scale(.985);transition:transform .12s}}
 
 /* Подчёркивание у пунктов меню растёт из центра, а не слева */
 .hdr-nav a::after{left:50%;right:50%;transition:left .28s,right .28s}
@@ -1695,32 +1694,13 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    Всё выключается при prefers-reduced-motion и на устройствах без мыши —
    на телефоне наклон бессмысленен и только тратит кадры. */
 (function () {
-  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
 
-  /* ── Ступенчатое появление ── */
-  var groups = document.querySelectorAll(".dirs, .vids, .pay3, .cases, .nums, .pains, .st-list");
-  groups.forEach(function (g) {
-    if (g.children.length < 2) return;
-    g.classList.add("stg");
-    [].forEach.call(g.children, function (c, i) {
-      c.style.transitionDelay = Math.min(i * 90, 540) + "ms";
-    });
-  });
-  if (window.IntersectionObserver) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -10% 0px", threshold: .08 });
-    groups.forEach(function (g) { io.observe(g); });
-  } else {
-    groups.forEach(function (g) { g.classList.add("in"); });
-  }
-
   /* ── Наклон за курсором ── */
-  if (reduce || !fine) return;
   var cards = document.querySelectorAll(".dir, .pc, .vid, .case-b, .magnet");
+  cards.forEach(function (el) { el.classList.add("tilt"); });
+  if (!fine) return;                 /* дальше — только там, где есть курсор */
   cards.forEach(function (el) {
-    el.classList.add("tilt");
     if (getComputedStyle(el).position === "static") el.style.position = "relative";
     var raf = 0, mx = 0, my = 0;
     function apply() {
