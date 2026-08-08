@@ -565,8 +565,20 @@ input[type=range]::-moz-range-thumb{width:22px; height:22px; border-radius:50%; 
 /* 1. Кнопка и телефон в шапке не сжимаются: место уступает меню */
 .hdr-in>.b{flex-shrink:0;white-space:nowrap}
 .hdr-in .hdr-tel{flex-shrink:0}
-.hdr-nav{min-width:0;overflow:hidden}
-.wm{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* Полезная ширина шапки ограничена --wrap (1240px минус поля ≈1150px) при любом
+   мониторе. Бренд + город + 10 пунктов + телефон + кнопка туда не влезают, поэтому
+   меню обрезалось посреди слова. В шапке оставляем страницы и «Кабинет»; якорные
+   пункты (Расчёт, Работы, Услуги, Вопросы) и так есть в теле страницы. */
+.hdr-nav{overflow:visible;flex-shrink:0}
+.hdr-nav a[href="#calc"],.hdr-nav a[href="#cases"],
+.hdr-nav a[href="#dirs"],.hdr-nav a[href="#faq"]{display:none}
+.wm{flex-shrink:0;white-space:nowrap;overflow:visible;text-overflow:clip}
+@media(min-width:1080px){.wm i{display:none}}
+
+/* Блок показателей лежит в .hero рядом с .hero-in, но без z-index — а плёнка
+   .hero-veil (absolute, z-index:1, снизу уже непрозрачная) накрывает всю секцию
+   и закрашивала цифры с подписями почти в ноль. Поднимаем над плёнкой. */
+.hero>.wrap{position:relative;z-index:2}
 
 /* 2. Цифры в блоке показателей: сплошной цвет как основа. Градиент по тексту
       накладывается только там, где он реально поддерживается, иначе при сбое
