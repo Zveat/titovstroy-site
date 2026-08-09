@@ -673,10 +673,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    Вставляем при подходе к экрану — iframe весит сотни килобайт. */
 .form-g{grid-template-columns:minmax(0,1fr)}          /* телефон: одна колонка */
 @media(min-width:900px){
-  .form-g{grid-template-columns:minmax(0,400px) minmax(0,1fr) minmax(0,320px);align-items:stretch}
-  .vwrap{grid-row:1/span 2;height:100%;margin:0}
+  /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
+     На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились. */
+  .form-g{grid-template-columns:minmax(0,360px) minmax(0,1fr);align-items:stretch}
+  .vwrap{grid-column:1;grid-row:1;height:100%;margin:0}
+  .quiz{grid-column:2;grid-row:1}
+  .form-g>.rv.rv-d1{grid-column:1/-1;grid-row:2}
   .vbox{height:100%;aspect-ratio:auto;min-height:100%}
 }
+/* Телефон в контактах не переносим */
+.tel-xl{white-space:nowrap}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
   background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
