@@ -2,7 +2,25 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
+<meta name="viewport" content="width=device-width,initial-scale=1"><script>
+/* ЯНДЕКС.МЕТРИКА. Номер счётчика подставить сюда ↓ (создаётся на metrika.yandex.ru).
+   Пока стоит 0 — счётчик не грузится и цели молчат, сайт работает как обычно. */
+window.YM_ID = 111433298;
+(function(){ if(!window.YM_ID) { window.ym = function(){}; return; }
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+  m[i].l=1*new Date();for(var j=0;j<e.length;j++){if(e[j].src===r){return}}
+  k=document.createElement(t),a=document.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window,document.scripts,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+  ym(window.YM_ID,"init",{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
+    referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+})();
+/* Короткая обёртка: ym("lead") вместо длинной формы вызова цели */
+(function(){ var raw = window.ym;
+  window.ym = function(a,b,c,d){ if(!window.YM_ID) return;
+    if(typeof a==="string"&&b===undefined) return raw(window.YM_ID,"reachGoal",a);
+    return raw(a,b,c,d); };
+})();
+</script><noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
 <title>Ремонт квартиры в новостройке под ключ в Караганде — без предоплаты</title>
 <meta name="description" content="Ремонт новостройки под ключ в Караганде: от черновой отделки до готового жилья. Оплата за принятые этапы, договор с фиксированной сметой, гарантия 12 месяцев. Бесплатный замер: +7 705 926 21 39.">
 <meta name="theme-color" content="#0A0D12">
@@ -647,6 +665,32 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 /* Нажатие на карточку на телефоне: тактильный отклик вместо наклона */
 @media(hover:none){.tilt:active{transform:scale(.985);transition:transform .12s}}
 
+
+/* 13. Квиз вместо формы: человек отвечает на короткие вопросы и втягивается,
+   а мы получаем объём заявки ещё до звонка. Телефон спрашиваем последним —
+   когда уже вложился в ответы, оставить его психологически легче. */
+.quiz{display:flex;flex-direction:column;gap:18px}
+.qz-top{display:flex;align-items:center;gap:14px}
+.qz-step{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.qz-bar{flex:1;height:4px;border-radius:4px;background:rgba(10,13,18,.10);overflow:hidden}
+.qz-bar i{display:block;height:100%;width:25%;border-radius:4px;
+  background:linear-gradient(90deg,var(--brass3),var(--brass));transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.qz-q{font-family:var(--display);font-weight:800;font-size:clamp(19px,2.2vw,24px);letter-spacing:-.02em;margin-bottom:4px}
+.qz-opts{display:flex;flex-direction:column;gap:9px}
+.qz-o{text-align:left;padding:15px 17px;border-radius:13px;font-size:15px;font-weight:600;font-family:inherit;
+  background:#fff;border:1px solid rgba(10,13,18,.14);color:var(--ink);cursor:pointer;
+  transition:border-color .2s,background .2s,transform .12s}
+.qz-o:hover{border-color:var(--brass);background:rgba(224,180,98,.08)}
+.qz-o:active{transform:scale(.99)}
+.qz-o.sel{border-color:var(--brass);background:rgba(224,180,98,.16)}
+.qz-pane{animation:qzIn .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes qzIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.qz-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.qz-back{background:none;border:none;color:var(--dim);font-size:13.5px;font-family:inherit;cursor:pointer;padding:6px 0}
+.qz-back:hover{color:var(--ink)}
+.qz-foot .fnote{margin:0;flex:1;min-width:180px}
+@media(max-width:520px){.qz-o{padding:16px 15px}}
+
 /* 12. Маркер по заголовку. Латунная заливка прочерчивается слева направо, текст
    под ней темнеет. Ничего не сдвигает: padding погашен отрицательным margin,
    box-decoration-break склеивает заливку на переносе строки. */
@@ -655,7 +699,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   padding:.02em .14em;margin:0 -.14em;
   -webkit-box-decoration-break:clone;box-decoration-break:clone;
   transition:background-size .8s cubic-bezier(.22,.8,.2,1),color .25s .4s}
-.rv.in .hl,.head.in .hl{background-size:100% 100%;color:#0A0D12}
+.rv.in .hl,.head.in .hl,.hl.on{background-size:100% 100%;color:#0A0D12}
+/* В первом экране маркер ложится на последнюю строку H1 — после того, как строки
+   заголовка встали на место, иначе заливка обгоняет текст. */
+.hero h1 .hl{padding:.02em .16em;margin:0 -.16em}
 
 /* Подчёркивание у пунктов меню растёт из центра, а не слева */
 .hdr-nav a::after{left:50%;right:50%;transition:left .28s,right .28s}
@@ -1118,23 +1165,55 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       <p class="lead">Инженер приедет, снимет замеры и уточнит объём. Смету по позициям с точной суммой и сроком пришлём после расчёта.</p>
     </div>
     <div class="form-g">
-      <form class="panel rv" id="lead" novalidate>
-        <div class="fld"><label for="f-name">Как к вам обращаться</label>
-          <input id="f-name" name="name" type="text" placeholder="Имя" autocomplete="name" required></div>
-        <div class="fld"><label for="f-tel">Телефон</label>
-          <input id="f-tel" name="tel" type="tel" placeholder="+7 (___) ___ __ __" autocomplete="tel" inputmode="tel" required></div>
-        <div class="fld"><label for="f-obj">Объект</label>
-          <select id="f-obj" name="obj">
-            <option>Квартира — вторичное жильё</option>
-            <option>Квартира в новостройке</option>
-            <option>Коммерческий объект, офис, магазин</option>
-            <option>Отдельный вид работ</option>
-            <option>Только демонтаж</option>
-            <option>Пока не определился</option>
-          </select></div>
-        <button class="b b-brass b-w mag" type="submit">Отправить заявку</button>
-        <p class="fnote" id="fnote">Нажимая кнопку, вы отправляете заявку в WhatsApp — ответим и согласуем время замера.</p>
-      </form>
+      <form class="panel rv quiz" id="lead" novalidate>
+<div class="qz-top"><span class="qz-step" id="qz-num">Шаг 1 из 4</span><div class="qz-bar"><i id="qz-fill"></i></div></div>
+
+<div class="qz-pane" data-s="1">
+  <div class="qz-q">Что ремонтируем?</div>
+  <div class="qz-opts" data-k="obj">
+    <button type="button" class="qz-o">Квартира — вторичка</button>
+    <button type="button" class="qz-o">Квартира в новостройке</button>
+    <button type="button" class="qz-o">Коммерция: офис, магазин</button>
+    <button type="button" class="qz-o">Отдельный вид работ</button>
+    <button type="button" class="qz-o">Только демонтаж</button>
+  </div>
+</div>
+
+<div class="qz-pane" data-s="2" hidden>
+  <div class="qz-q">Какая площадь?</div>
+  <div class="qz-opts" data-k="area">
+    <button type="button" class="qz-o">до 40 м²</button>
+    <button type="button" class="qz-o">40–60 м²</button>
+    <button type="button" class="qz-o">60–90 м²</button>
+    <button type="button" class="qz-o">больше 90 м²</button>
+    <button type="button" class="qz-o">пока не знаю</button>
+  </div>
+</div>
+
+<div class="qz-pane" data-s="3" hidden>
+  <div class="qz-q">Когда планируете начать?</div>
+  <div class="qz-opts" data-k="when">
+    <button type="button" class="qz-o">В ближайшие 2 недели</button>
+    <button type="button" class="qz-o">В этом месяце</button>
+    <button type="button" class="qz-o">Через 1–2 месяца</button>
+    <button type="button" class="qz-o">Пока просто считаю</button>
+  </div>
+</div>
+
+<div class="qz-pane" data-s="4" hidden>
+  <div class="qz-q">Куда прислать расчёт?</div>
+  <div class="fld"><label for="f-name">Как к вам обращаться</label>
+    <input id="f-name" name="name" type="text" placeholder="Имя" autocomplete="name" required></div>
+  <div class="fld"><label for="f-tel">Телефон</label>
+    <input id="f-tel" name="tel" type="tel" placeholder="+7 (___) ___ __ __" autocomplete="tel" inputmode="tel" required></div>
+  <button class="b b-brass b-w mag" type="submit">Получить расчёт</button>
+</div>
+
+<div class="qz-foot">
+  <button type="button" class="qz-back" id="qz-back" hidden>← Назад</button>
+  <p class="fnote" id="fnote">Четыре коротких вопроса — так мы сразу поймём объём и не будем гонять вас по мелочам.</p>
+</div>
+</form>
       <div class="rv rv-d1">
         <span class="kicker">Или сразу напрямую</span>
         <div style="margin-top:14px"><a class="tel-xl" href="tel:+77059262139">+7 705 926 21 39</a></div>
@@ -1663,21 +1742,67 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   });
 
   /* ── Заявка ──────────────────────────────────────────────────────────── */
+  /* ── Цели Метрики на ключевые действия ── */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("a,button"); if (!a) return;
+    var href = a.getAttribute("href") || "";
+    if (href.indexOf("wa.me") > -1) ym("whatsapp");
+    else if (href.indexOf("tel:") === 0) ym("call");
+    else if (a.id === "calc-send") ym("calc_send");
+    else if (href.indexOf("#zayavka") > -1) ym("cta_zamer");
+  }, { passive: true });
+
+  /* ── Квиз ──────────────────────────────────────────────────────────────
+     Шаги 1–3 отвечаются одним касанием и сразу листают вперёд. Контакты —
+     последним экраном. Ответы уходят в WhatsApp одним сообщением, чтобы
+     менеджер видел объём до звонка. */
   var form = document.getElementById("lead"), note = document.getElementById("fnote");
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var name = form.name.value.trim(), tel = form.tel.value.trim();
-    if (!name || !tel) {
-      note.textContent = "Укажите имя и телефон — без них мы не сможем перезвонить.";
-      note.style.color = "#E0B462";
-      (!name ? form.name : form.tel).focus(); return;
+  if (form) {
+    var panes = form.querySelectorAll(".qz-pane"), fill = document.getElementById("qz-fill"),
+        num = document.getElementById("qz-num"), back = document.getElementById("qz-back"),
+        step = 1, answers = {}, started = false;
+
+    function show(n) {
+      step = Math.min(4, Math.max(1, n));
+      panes.forEach(function (p) { p.hidden = +p.dataset.s !== step; });
+      fill.style.width = (step * 25) + "%";
+      num.textContent = "Шаг " + step + " из 4";
+      back.hidden = step === 1;
+      if (step === 4) { var i = form.querySelector("#f-name"); if (i) setTimeout(function () { i.focus(); }, 120); }
+      ym("quiz_step" + step);
     }
-    var text = "Здравствуйте! Заявка на бесплатный замер.\nИмя: " + name
-      + "\nТелефон: " + tel + "\nОбъект: " + form.obj.value;
-    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
-    note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
-    note.style.color = "#E0B462";
-  });
+    back.addEventListener("click", function () { show(step - 1); });
+
+    form.querySelectorAll(".qz-opts").forEach(function (g) {
+      g.addEventListener("click", function (e) {
+        var b = e.target.closest(".qz-o"); if (!b) return;
+        if (!started) { started = true; ym("quiz_start"); }
+        [].forEach.call(g.children, function (c) { c.classList.remove("sel"); });
+        b.classList.add("sel");
+        answers[g.dataset.k] = b.textContent.trim();
+        setTimeout(function () { show(step + 1); }, 180);
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = form.name.value.trim(), tel = form.tel.value.trim();
+      if (!name || !tel) {
+        note.textContent = "Укажите имя и телефон — без них мы не сможем перезвонить.";
+        note.style.color = "#B8863B";
+        (!name ? form.name : form.tel).focus(); return;
+      }
+      var text = "Здравствуйте! Заявка на бесплатный замер.\n"
+        + "Имя: " + name + "\nТелефон: " + tel
+        + "\nОбъект: " + (answers.obj || "не указан")
+        + "\nПлощадь: " + (answers.area || "не указана")
+        + "\nСтарт: " + (answers.when || "не указан");
+      ym("lead");
+      window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+      note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
+      note.style.color = "#B8863B";
+    });
+  }
 })();
 </script>
 <script>
@@ -1725,6 +1850,14 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     last.nodeValue = headTxt ? headTxt + " " : "";
     last.parentNode.insertBefore(span, last.nextSibling);
   });
+
+  /* Первый экран: маркер на последней строке заголовка. Строка уже выделена
+     цветом — заменяем цвет на заливку, эффект тот же, но заметнее. */
+  var h1last = document.querySelector(".hero h1 .ln:last-child > span");
+  if (h1last) {
+    h1last.classList.add("hl");
+    setTimeout(function () { h1last.classList.add("on"); }, 1150);
+  }
 
   /* ── Наклон за курсором ── */
   var cards = document.querySelectorAll(".dir, .pc, .vid, .case-b, .magnet");
