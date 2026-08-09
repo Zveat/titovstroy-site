@@ -3,23 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><script>
-/* ЯНДЕКС.МЕТРИКА. Номер счётчика подставить сюда ↓ (создаётся на metrika.yandex.ru).
-   Пока стоит 0 — счётчик не грузится и цели молчат, сайт работает как обычно. */
+/* ЯНДЕКС.МЕТРИКА — код счётчика ровно в том виде, как его выдаёт Метрика.
+   НЕ ПЕРЕОПРЕДЕЛЯТЬ window.ym. tag.js после загрузки читает ym.a (очередь
+   вызовов, накопленных до загрузки) и ym.l (момент старта). Обёртка поверх ym
+   стирала эти свойства — вызов "init" терялся, счётчик не поднимался, данных
+   не было и проверка самой Метрики не проходила. Цели шлём отдельным
+   хелпером ymGoal(), сам ym не трогаем. */
 window.YM_ID = 111433298;
-(function(){ if(!window.YM_ID) { window.ym = function(){}; return; }
-  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-  m[i].l=1*new Date();for(var j=0;j<e.length;j++){if(e[j].src===r){return}}
-  k=document.createElement(t),a=document.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-  (window,document.scripts,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-  ym(window.YM_ID,"init",{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
-    referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
-})();
-/* Короткая обёртка: ym("lead") вместо длинной формы вызова цели */
-(function(){ var raw = window.ym;
-  window.ym = function(a,b,c,d){ if(!window.YM_ID) return;
-    if(typeof a==="string"&&b===undefined) return raw(window.YM_ID,"reachGoal",a);
-    return raw(a,b,c,d); };
-})();
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(111433298, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+
+/* Короткая форма для целей: ymGoal("lead"). Работает и если Метрика не
+   загрузилась (блокировщик, офлайн) — молча ничего не делает. */
+window.ymGoal = function(name, params){
+  try { if (window.ym && window.YM_ID) window.ym(window.YM_ID, "reachGoal", name, params); } catch(e){}
+};
 </script><noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
 <title>Ремонт офиса и коммерческих помещений в Караганде — по договору</title>
 <meta name="description" content="Ремонт офисов, магазинов, бутиков и складов в Караганде. Работаем этапами без остановки бизнеса, официальный договор и закрывающие документы, гарантия 12 месяцев. Бесплатный замер: +7 705 926 21 39.">
@@ -675,12 +678,23 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 @media(min-width:900px){
   /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
      На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились. */
-  .form-g{grid-template-columns:minmax(0,360px) minmax(0,1fr);align-items:stretch}
+  .form-g{grid-template-columns:minmax(0,520px) minmax(0,1fr);align-items:stretch}
   .vwrap{grid-column:1;grid-row:1;height:100%;margin:0}
   .quiz{grid-column:2;grid-row:1}
   .form-g>.rv.rv-d1{grid-column:1/-1;grid-row:2}
   .vbox{height:100%;aspect-ratio:auto;min-height:100%}
 }
+
+/* Варианты ответа: в две колонки, когда влезают — список перестаёт быть
+   простынёй, и весь шаг читается одним взглядом. Стрелка появляется на
+   наведении: подсказывает, что клик листает дальше. */
+.qz-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px}
+.qz-o{position:relative;padding-right:38px;line-height:1.3}
+.qz-o::after{content:"→";position:absolute;right:15px;top:50%;transform:translate(-6px,-50%);
+  color:var(--brass3);font-weight:700;opacity:0;transition:opacity .2s,transform .2s}
+.qz-o:hover::after{opacity:1;transform:translate(0,-50%)}
+.qz-o.sel::after{content:"✓";opacity:1;transform:translate(0,-50%);color:#1F7A4D}
+.quiz{justify-content:center}
 /* Телефон в контактах не переносим */
 .tel-xl{white-space:nowrap}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
@@ -1779,10 +1793,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   document.addEventListener("click", function (e) {
     var a = e.target.closest("a,button"); if (!a) return;
     var href = a.getAttribute("href") || "";
-    if (href.indexOf("wa.me") > -1) ym("whatsapp");
-    else if (href.indexOf("tel:") === 0) ym("call");
-    else if (a.id === "calc-send") ym("calc_send");
-    else if (href.indexOf("#zayavka") > -1) ym("cta_zamer");
+    if (href.indexOf("wa.me") > -1) ymGoal("whatsapp");
+    else if (href.indexOf("tel:") === 0) ymGoal("call");
+    else if (a.id === "calc-send") ymGoal("calc_send");
+    else if (href.indexOf("#zayavka") > -1) ymGoal("cta_zamer");
   }, { passive: true });
 
   /* ── Ролик процесса: строго отрезок 28–60 с, по кругу ──────────────────
@@ -1855,14 +1869,14 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       num.textContent = "Шаг " + step + " из 4";
       back.hidden = step === 1;
       if (step === 4) { var i = form.querySelector("#f-name"); if (i) setTimeout(function () { i.focus(); }, 120); }
-      ym("quiz_step" + step);
+      ymGoal("quiz_step" + step);
     }
     back.addEventListener("click", function () { show(step - 1); });
 
     form.querySelectorAll(".qz-opts").forEach(function (g) {
       g.addEventListener("click", function (e) {
         var b = e.target.closest(".qz-o"); if (!b) return;
-        if (!started) { started = true; ym("quiz_start"); }
+        if (!started) { started = true; ymGoal("quiz_start"); }
         [].forEach.call(g.children, function (c) { c.classList.remove("sel"); });
         b.classList.add("sel");
         answers[g.dataset.k] = b.textContent.trim();
@@ -1883,7 +1897,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
         + "\nОбъект: " + (answers.obj || "не указан")
         + "\nПлощадь: " + (answers.area || "не указана")
         + "\nСтарт: " + (answers.when || "не указан");
-      ym("lead");
+      ymGoal("lead");
       window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
       note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
       note.style.color = "#B8863B";
