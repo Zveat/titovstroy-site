@@ -710,7 +710,13 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
 .vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12;flex:none}
 .vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:16/9;width:110%;height:auto;border:0;pointer-events:none}
+  aspect-ratio:16/9;width:116%;height:auto;border:0;pointer-events:none}
+/* Шапка плеера (название ролика, аватар канала, кнопка «Смотреть на YouTube»)
+   параметрами не отключается — modestbranding YouTube отменил. Режем её
+   дважды: плеер шире рамки на 16% (верхние ~7% кадра уходят за край) и
+   поверх остатка лежит эта тень. Снизу логотип гасит градиент подписи. */
+.vshade{position:absolute;left:0;right:0;top:0;height:24%;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,#0A0D12 0%,rgba(10,13,18,.92) 34%,rgba(10,13,18,.5) 66%,transparent 100%)}
 .vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
   display:flex;flex-direction:column;gap:3px;
   background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
@@ -1224,7 +1230,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     </div>
     <div class="form-g">
             <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
-  <div class="vbox" id="vbox"><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
+  <div class="vbox" id="vbox"><div class="vshade"></div><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
   <div class="vstages"><i>в ролике по порядку</i><span>Демонтаж</span><span>Электрика и сантехника</span><span>Стяжка и штукатурка</span><span>Чистовая отделка</span></div>
 </div>
       <form class="panel rv quiz" id="lead" novalidate>
@@ -1830,7 +1836,11 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       ytPlayer = new YT.Player(host, {
         host: "https://www.youtube-nocookie.com",
         videoId: "WS3gQj_FQjI",
-        playerVars: { start: FROM, end: TO, autoplay: 1, mute: 1, controls: 0,
+        /* end сюда НЕ передаём: с ним YouTube на 60-й секунде честно завершает
+           ролик и показывает свой финальный экран — название, аватар канала,
+           «Другие видео», логотип. Отрезок держим сами, перематывая до того,
+           как плеер успеет закончиться. */
+        playerVars: { start: FROM, autoplay: 1, mute: 1, controls: 0, loop: 0,
                       rel: 0, playsinline: 1, disablekb: 1, fs: 0, iv_load_policy: 3 },
         events: {
           onReady: function (e) {
@@ -1838,12 +1848,17 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
             ytTimer = setInterval(function () {
               if (!ytPlayer || !ytPlayer.getCurrentTime) return;
               var t = ytPlayer.getCurrentTime();
-              if (t >= TO || t < FROM - 1) ytPlayer.seekTo(FROM, true);
+              /* Перематываем с запасом в четверть секунды до TO: если дать
+                 плееру дойти до конца ролика, он покажет свою концовку. */
+              if (t >= TO - 0.25 || t < FROM - 1) ytPlayer.seekTo(FROM, true);
             }, 250);
           },
           onStateChange: function (e) {
-            /* доиграл до end — YouTube ставит ENDED, возвращаем на начало отрезка */
+            /* Любая остановка = наш декоративный цикл встал, а YouTube поверх
+               рисует название с аватаром. Сразу возвращаем на начало отрезка
+               и продолжаем — экран окончания просто не успевает появиться. */
             if (e.data === YT.PlayerState.ENDED) { ytPlayer.seekTo(FROM, true); ytPlayer.playVideo(); }
+            else if (e.data === YT.PlayerState.PAUSED) { ytPlayer.playVideo(); }
           }
         }
       });
