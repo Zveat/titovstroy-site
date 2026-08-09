@@ -16,7 +16,12 @@ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src =
 k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
 (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-ym(111433298, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+/* НИ В КОЕМ СЛУЧАЕ не добавлять сюда параметр ssr. В tag.js на него
+   висит проверка Gy.init: если он есть, Метрика делает return ДО создания
+   счётчика — yaCounter не появляется, хит не уходит, данных нет вообще,
+   при этом ошибок в консоли ноль и сам tag.js грузится с кодом 200.
+   Он нужен только страницам с серверным рендерингом, где hit шлют вручную. */
+ym(111433298, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true});
 
 /* Короткая форма для целей: ymGoal("lead"). Работает и если Метрика не
    загрузилась (блокировщик, офлайн) — молча ничего не делает. */
@@ -673,11 +678,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 /* 14. Ролик — широким кадром слева от квиза.
    Раньше он тянулся во всю высоту квиза и получался почти квадратом: кадр
    16:9 в такой рамке обрезался по бокам больше чем наполовину, разобрать
-   в нём было нечего. Теперь наоборот — ролику отдана вся свободная ширина,
-   рамка держит 16:9, а по высоте он просто centruется относительно квиза.
-   YouTube рисует шапку с названием и логотип, параметрами это не убирается:
-   плеер чуть крупнее рамки (110%) и подрезан краями — уходит ~5% кадра
-   вместо прежних 40%. Вставляем при подходе к экрану — iframe тяжёлый. */
+   в нём было нечего. Теперь ролику отдана вся свободная ширина, рамка держит
+   16:9, а высоту левой колонки добирает полоса этапов под кадром — поэтому
+   низы карточек сходятся ровно. Файл свой, обрезать ради чужих плашек больше
+   нечего, кадр виден целиком. Подключаем при подходе к экрану. */
 .form-g{grid-template-columns:minmax(0,1fr)}          /* телефон и узкий ноут: одна колонка */
 @media(min-width:1180px){
   /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
@@ -708,16 +712,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
   background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);display:flex;flex-direction:column;
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
+/* Файл 16:9 в рамке 16:9 — кадр показывается целиком, обрезать нечего. */
 .vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12;flex:none}
-.vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:16/9;width:116%;height:auto;border:0;pointer-events:none}
-/* Шапка плеера (название ролика, аватар канала, кнопка «Смотреть на YouTube»)
-   параметрами не отключается — modestbranding YouTube отменил. Режем её
-   дважды: плеер шире рамки на 16% (верхние ~7% кадра уходят за край) и
-   поверх остатка лежит эта тень. Снизу логотип гасит градиент подписи. */
-.vshade{position:absolute;left:0;right:0;top:0;height:24%;z-index:2;pointer-events:none;
-  background:linear-gradient(180deg,#0A0D12 0%,rgba(10,13,18,.92) 34%,rgba(10,13,18,.5) 66%,transparent 100%)}
-.vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
+.vbox video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  border:0;background:#0A0D12}
+/* Автозапуск запретили — постер остаётся и появляется намёк на касание */
+.vbox.vwait::after{content:"▶";position:absolute;left:50%;top:50%;z-index:3;
+  transform:translate(-50%,-50%);width:66px;height:66px;border-radius:50%;
+  display:grid;place-items:center;font-size:22px;color:#0A0D12;background:rgba(255,255,255,.92)}
+.vbox.vwait{cursor:pointer}
+.vcap{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:44px 18px 16px;
   display:flex;flex-direction:column;gap:3px;
   background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
 /* Полоса этапов под кадром. Кадр держит 16:9 и потому ниже квиза — этой
@@ -1232,7 +1236,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     </div>
     <div class="form-g">
             <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
-  <div class="vbox" id="vbox"><div class="vshade"></div><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
+  <div class="vbox" id="vbox"><video id="vplay" poster="/video/process-poster.jpg" muted loop playsinline autoplay preload="none" disablepictureinpicture aria-label="Ремонт в ускоренной съёмке"><source data-src="/video/process.webm" type="video/webm"><source data-src="/video/process.mp4" type="video/mp4"></video><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
   <div class="vstages"><i>в ролике по порядку</i><span>Демонтаж</span><span>Электрика и сантехника</span><span>Стяжка и штукатурка</span><span>Чистовая отделка</span></div>
 </div>
       <form class="panel rv quiz" id="lead" novalidate>
@@ -1822,58 +1826,32 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     else if (href.indexOf("#zayavka") > -1) ymGoal("cta_zamer");
   }, { passive: true });
 
-  /* ── Ролик процесса: строго отрезок 28–60 с, по кругу ──────────────────
-     Параметрами URL это не делается: YouTube применяет start/end только к
-     первому проигрыванию, а при loop крутит ролик целиком с нуля. Поэтому
-     берём плеерный API и перематываем на 28-ю секунду сами, как только
-     дошли до 60-й. Плеер поднимаем при подходе к экрану — он весит сотни
-     килобайт, грузить его сразу незачем. */
-  var vbox = document.getElementById("vbox");
-  if (vbox) {
-    var FROM = 28, TO = 60, ytPlayer = null, ytTimer = 0;
-
-    function buildPlayer() {
-      var host = document.createElement("div");
-      vbox.appendChild(host);
-      ytPlayer = new YT.Player(host, {
-        host: "https://www.youtube-nocookie.com",
-        videoId: "WS3gQj_FQjI",
-        /* end сюда НЕ передаём: с ним YouTube на 60-й секунде честно завершает
-           ролик и показывает свой финальный экран — название, аватар канала,
-           «Другие видео», логотип. Отрезок держим сами, перематывая до того,
-           как плеер успеет закончиться. */
-        playerVars: { start: FROM, autoplay: 1, mute: 1, controls: 0, loop: 0,
-                      rel: 0, playsinline: 1, disablekb: 1, fs: 0, iv_load_policy: 3 },
-        events: {
-          onReady: function (e) {
-            e.target.mute(); e.target.playVideo();
-            ytTimer = setInterval(function () {
-              if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-              var t = ytPlayer.getCurrentTime();
-              /* Перематываем с запасом в четверть секунды до TO: если дать
-                 плееру дойти до конца ролика, он покажет свою концовку. */
-              if (t >= TO - 0.25 || t < FROM - 1) ytPlayer.seekTo(FROM, true);
-            }, 250);
-          },
-          onStateChange: function (e) {
-            /* Любая остановка = наш декоративный цикл встал, а YouTube поверх
-               рисует название с аватаром. Сразу возвращаем на начало отрезка
-               и продолжаем — экран окончания просто не успевает появиться. */
-            if (e.data === YT.PlayerState.ENDED) { ytPlayer.seekTo(FROM, true); ytPlayer.playVideo(); }
-            else if (e.data === YT.PlayerState.PAUSED) { ytPlayer.playVideo(); }
-          }
-        }
-      });
-    }
-
+  /* ── Ролик процесса ────────────────────────────────────────────────────
+     Свой файл вместо ютубовского плеера. Так уходит разом весь его инвентарь:
+     название ролика, аватар канала, «Другие видео», логотип и экран окончания —
+     их нельзя было отключить параметрами, только прятать обрезкой кадра.
+     Здесь кадр видно целиком, цикл бесшовный, вес 2,5 МБ вместо плеера на
+     сотни килобайт плюс сам поток. Файл уже обрезан по нужному куску и без
+     звука. Подключаем src при подходе к экрану — до этого ничего не грузится. */
+  var vbox = document.getElementById("vbox"), vplay = document.getElementById("vplay");
+  if (vbox && vplay) {
     var loadVid = function () {
       if (vbox.dataset.on) return; vbox.dataset.on = "1";
-      if (window.YT && window.YT.Player) return buildPlayer();
-      var prev = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = function () { if (prev) prev(); buildPlayer(); };
-      var sc = document.createElement("script");
-      sc.src = "https://www.youtube.com/iframe_api"; sc.async = 1;
-      document.head.appendChild(sc);
+      /* Адреса лежат в data-src, поэтому до этого момента браузер не тянет
+         ни байта. Первым идёт webm (VP9) — он легче; Safari его не умеет и
+         сам возьмёт mp4. */
+      var srcs = vplay.querySelectorAll("source");
+      for (var i = 0; i < srcs.length; i++) srcs[i].src = srcs[i].dataset.src;
+      vplay.load();
+      var go = vplay.play();
+      /* Автозапуск без звука разрешают все браузеры, но если вдруг запретили —
+         показываем постер и даём запустить касанием, а не оставляем пустоту. */
+      if (go && go.catch) go.catch(function () {
+        vbox.classList.add("vwait");
+        vbox.addEventListener("click", function () {
+          vplay.play(); vbox.classList.remove("vwait");
+        }, { once: true });
+      });
     };
 
     if (window.IntersectionObserver) {
