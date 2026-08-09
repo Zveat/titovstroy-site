@@ -818,37 +818,28 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    в края карточки и налезал на скруглённый угол. */
 .kp-note{max-width:880px;margin:13px auto 0;padding:0 2px;font-size:12.2px;
   line-height:1.55;color:#6B7280}
-
-/* На телефоне таблица не помещается: колонки «Цена» и «Сумма» уезжали за
-   край, и человек видел только названия работ — то есть ровно не то, ради
-   чего блок сделан. Поэтому ниже 620px строка перестаёт быть строкой и
-   становится карточкой: раздел, работа, под ней «объём × цена» и справа
-   сумма. Горизонтальной прокрутки не остаётся. */
-@media(max-width:620px){
-  .kp-scroll{overflow:visible}
-  .kp-t{min-width:0;display:block;font-size:13px}
-  .kp-t thead{display:none}
-  .kp-t tbody,.kp-t tfoot{display:block}
-  .kp-t tbody tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;
-    padding:10px 13px;border-bottom:1px solid rgba(10,13,18,.07)}
-  .kp-t td{display:block;padding:0;border:0;text-align:left}
-  .kp-t .dn{order:1;width:20px;flex:none;font-size:11.5px;line-height:1.5}
-  .kp-t .dr{order:2;width:calc(100% - 26px);font-size:10.5px;letter-spacing:.06em;
-    text-transform:uppercase;white-space:normal}
-  .kp-t .dm{order:3;width:100%;padding-left:26px;max-width:none;line-height:1.35;margin-top:2px}
-  .kp-t .dq{order:4;margin-left:26px;margin-top:5px;color:#6B7280}
-  .kp-t .du{order:5;margin-top:5px;color:#6B7280}
-  .kp-t .dp{order:6;margin-top:5px;color:#6B7280}
-  .kp-t .dp::before{content:"×";margin-right:5px;color:#B3B8BF}
-  .kp-t .dt{order:7;margin-left:auto;margin-top:5px;font-size:13.5px}
-  /* Шапка раздела и итог — в одну строку «название … сумма» */
-  .kp-t tr.ds,.kp-t tfoot tr{display:flex;justify-content:space-between;align-items:center;
-    gap:10px;padding:9px 13px}
-  .kp-t tr.ds td,.kp-t tfoot td{padding:0}
-  .kp-t tfoot td:last-child{font-size:15px}
-  .kp-t tr.dmore{display:block;padding:6px 13px;text-align:center}
-  .kp-t tr.dmore td{text-align:center;padding:0}
-}
+/* Листание сметы вбок на телефоне. Таблицу в карточки не разбираем — сам
+   вид документа и есть смысл блока. Вместо этого показываем, что её можно
+   мотать: тени у краёв появляются по мере прокрутки, подсказка гаснет после
+   первого движения пальцем, а при первом появлении блок сам «подмигивает» —
+   уезжает вбок и возвращается, иначе человек не догадается листать. */
+.kp-wrap{position:relative}
+.kp-wrap::before,.kp-wrap::after{content:"";position:absolute;top:0;bottom:0;width:38px;z-index:4;
+  pointer-events:none;opacity:0;transition:opacity .4s}
+.kp-wrap::before{left:0;background:linear-gradient(90deg,rgba(10,13,18,.26),rgba(10,13,18,0))}
+.kp-wrap::after{right:0;background:linear-gradient(270deg,rgba(10,13,18,.26),rgba(10,13,18,0))}
+.kp-wrap.can-l::before{opacity:1}
+.kp-wrap.can-r::after{opacity:1}
+.kp-scroll{scroll-behavior:smooth}
+.kp-hint{position:absolute;right:12px;bottom:12px;z-index:5;display:none;align-items:center;gap:7px;
+  padding:7px 13px;border-radius:999px;background:rgba(10,13,18,.9);color:#fff;
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  pointer-events:none;transition:opacity .45s,transform .45s;
+  box-shadow:0 10px 26px -12px rgba(0,0,0,.9)}
+.kp-hint i{font-style:normal;color:var(--brass);animation:kpNudge 1.25s ease-in-out infinite}
+@keyframes kpNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+.kp-hint.off{opacity:0;transform:translateY(6px)}
+@media(max-width:900px){.kp-hint{display:inline-flex}}
 
 .ex-g{display:grid;gap:13px}
 @media(min-width:640px){.ex-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1049,7 +1040,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
         <div><b>Ценовое предложение</b><span>пример: вторичка 61 м², полный цикл с санузлом под ключ</span></div>
         <div class="kp-sum"><span>Пример · итого</span><b>4 016 700 ₸</b></div>
       </div>
-      <div class="kp-scroll">
+      <div class="kp-wrap"><div class="kp-scroll">
         <table class="kp-t">
           <thead><tr><th>№</th><th>Раздел</th><th>Наименование</th><th>Ед.</th><th>Объём</th><th>Цена</th><th>Сумма</th></tr></thead>
           <tbody>
@@ -1068,7 +1059,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
           </tbody>
           <tfoot><tr><td colspan="6">Итого по смете</td><td>4 016 700 ₸</td></tr></tfoot>
         </table>
-      </div>
+      </div><div class="kp-hint" aria-hidden="true"><span>листайте</span><i>→</i></div></div>
     </div>
       <p class="kp-note"><b>Цифры в примере округлены и не являются офертой.</b> Состав и структура работ — как в реальной смете: показаны 6 позиций из 22, остальные свёрнуты. Ваша сумма считается по вашим объёмам после замера. Стоимость материалов в смету работ не входит.</p>
 
@@ -1887,6 +1878,45 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     else if (href.indexOf("tel:") === 0) ymGoal("call");
     else if (href.indexOf("#zayavka") > -1) ymGoal("cta_zamer");
   }, { passive: true });
+
+  /* ── Смета: подсказка и тени при листании вбок ─────────────────────────
+     Таблица шире телефона. Молча обрезать её нельзя — человек не поймёт, что
+     справа есть цена и сумма. Поэтому края затеняются по мере прокрутки, а
+     при первом показе блок сам сдвигается и возвращается. */
+  var kpWrap = document.querySelector(".kp-wrap"),
+      kpScroll = document.querySelector(".kp-scroll"),
+      kpHint = document.querySelector(".kp-hint");
+  if (kpWrap && kpScroll) {
+    var edges = function () {
+      var max = kpScroll.scrollWidth - kpScroll.clientWidth;
+      kpWrap.classList.toggle("can-l", kpScroll.scrollLeft > 4);
+      kpWrap.classList.toggle("can-r", max > 4 && kpScroll.scrollLeft < max - 4);
+    };
+    var peeked = false;
+    kpScroll.addEventListener("scroll", function () {
+      edges();
+      if (peeked && kpHint) kpHint.classList.add("off");
+    }, { passive: true });
+    addEventListener("resize", edges, { passive: true });
+    edges();
+
+    if (window.IntersectionObserver) {
+      var kio = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        kio.disconnect();
+        var max = kpScroll.scrollWidth - kpScroll.clientWidth;
+        if (max < 30) { if (kpHint) kpHint.style.display = "none"; return; }
+        setTimeout(function () {
+          kpScroll.scrollTo({ left: Math.min(120, max), behavior: "smooth" });
+          setTimeout(function () {
+            kpScroll.scrollTo({ left: 0, behavior: "smooth" });
+            setTimeout(function () { peeked = true; }, 700);
+          }, 780);
+        }, 260);
+      }, { threshold: 0.35 });
+      kio.observe(kpWrap);
+    } else { peeked = true; }
+  }
 
   /* ── Ролик процесса ────────────────────────────────────────────────────
      Свой файл вместо ютубовского плеера. Так уходит разом весь его инвентарь:
