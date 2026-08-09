@@ -670,19 +670,24 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
 
 
-/* 14. Ролик — вертикальным полотном слева от квиза, во всю его высоту.
-   YouTube всегда рисует шапку с названием и логотип, параметрами не убрать:
-   растягиваем плеер крупнее рамки и обрезаем краями, в кадре только картинка.
-   Вставляем при подходе к экрану — iframe весит сотни килобайт. */
+/* 14. Ролик — широким кадром слева от квиза.
+   Раньше он тянулся во всю высоту квиза и получался почти квадратом: кадр
+   16:9 в такой рамке обрезался по бокам больше чем наполовину, разобрать
+   в нём было нечего. Теперь наоборот — ролику отдана вся свободная ширина,
+   рамка держит 16:9, а по высоте он просто centruется относительно квиза.
+   YouTube рисует шапку с названием и логотип, параметрами это не убирается:
+   плеер чуть крупнее рамки (110%) и подрезан краями — уходит ~5% кадра
+   вместо прежних 40%. Вставляем при подходе к экрану — iframe тяжёлый. */
 .form-g{grid-template-columns:minmax(0,1fr)}          /* телефон: одна колонка */
 @media(min-width:900px){
   /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
      На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились. */
-  .form-g{grid-template-columns:minmax(0,520px) minmax(0,1fr);align-items:stretch}
-  .vwrap{grid-column:1;grid-row:1;height:100%;margin:0}
-  .quiz{grid-column:2;grid-row:1}
+  .form-g{grid-template-columns:minmax(0,1fr) minmax(0,380px);align-items:start}
+  .vwrap{grid-column:1;grid-row:1;margin:0}
+  /* Шаги квиза разной высоты (у 4-го вопрос в три строки). Без min-height
+     карточка прыгала бы на каждом клике и дёргала за собой всё, что ниже. */
+  .quiz{grid-column:2;grid-row:1;min-height:545px}
   .form-g>.rv.rv-d1{grid-column:1/-1;grid-row:2}
-  .vbox{height:100%;aspect-ratio:auto;min-height:100%}
 }
 
 /* Варианты ответа: в две колонки, когда влезают — список перестаёт быть
@@ -700,9 +705,9 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
   background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
-.vbox{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0A0D12}
+.vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12}
 .vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:16/9;height:132%;width:auto;min-width:132%;border:0;pointer-events:none}
+  aspect-ratio:16/9;width:110%;height:auto;border:0;pointer-events:none}
 .vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
   display:flex;flex-direction:column;gap:3px;
   background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
