@@ -667,23 +667,27 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
 
 
-/* 14. Немой ускоренный процесс — широким кадром над квизом.
-   YouTube всегда рисует свою шапку с названием и логотип: параметрами их убрать
-   нельзя. Поэтому растягиваем плеер за пределы рамки и обрезаем её краями —
-   в кадре остаётся только картинка. Плеер вставляется при подходе к экрану:
-   iframe весит сотни килобайт, тянуть его сразу незачем. */
-.vwrap{margin:0 0 clamp(22px,3vw,38px);border-radius:20px;overflow:hidden;
-  border:1px solid var(--hair);background:#0A0D12;position:relative;
+/* 14. Ролик — вертикальным полотном слева от квиза, во всю его высоту.
+   YouTube всегда рисует шапку с названием и логотип, параметрами не убрать:
+   растягиваем плеер крупнее рамки и обрезаем краями, в кадре только картинка.
+   Вставляем при подходе к экрану — iframe весит сотни килобайт. */
+.form-g{grid-template-columns:minmax(0,1fr)}          /* телефон: одна колонка */
+@media(min-width:900px){
+  .form-g{grid-template-columns:minmax(0,400px) minmax(0,1fr) minmax(0,320px);align-items:stretch}
+  .vwrap{grid-row:1/span 2;height:100%;margin:0}
+  .vbox{height:100%;aspect-ratio:auto;min-height:100%}
+}
+.vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
+  background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
-.vbox{position:relative;aspect-ratio:16/7;overflow:hidden;background:#0A0D12}
-.vbox iframe{position:absolute;top:50%;left:50%;width:100%;height:190%;
-  transform:translate(-50%,-50%);border:0;pointer-events:none}
-.vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;
-  padding:34px 20px 16px;display:flex;flex-direction:column;gap:3px;
-  background:linear-gradient(180deg,transparent,rgba(10,13,18,.86) 62%)}
+.vbox{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0A0D12}
+.vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  aspect-ratio:16/9;height:132%;width:auto;min-width:132%;border:0;pointer-events:none}
+.vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
+  display:flex;flex-direction:column;gap:3px;
+  background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
 .vcap b{font-size:15px;font-weight:700;color:#fff}
 .vcap span{font-size:12.6px;color:rgba(255,255,255,.72);line-height:1.45}
-@media(max-width:760px){.vbox{aspect-ratio:16/9}.vbox iframe{height:210%}}
 
 /* 13. Квиз вместо формы: человек отвечает на короткие вопросы и втягивается,
    а мы получаем объём заявки ещё до звонка. Телефон спрашиваем последним —
@@ -1193,11 +1197,11 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       <h2 class="d d2">Вызовите инженера на замер</h2>
       <p class="lead">Инженер приедет, снимет замеры и уточнит объём. Смету по позициям с точной суммой и сроком пришлём после расчёта.</p>
     </div>
-    <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
+    <div class="form-g">
+            <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
   <div class="vbox" id="vbox"></div>
   <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
 </div>
-            <div class="form-g">
       <form class="panel rv quiz" id="lead" novalidate>
 <div class="qz-top"><span class="qz-step" id="qz-num">Шаг 1 из 4</span><div class="qz-bar"><i id="qz-fill"></i></div></div>
 
@@ -1785,21 +1789,51 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     else if (href.indexOf("#zayavka") > -1) ym("cta_zamer");
   }, { passive: true });
 
-  /* ── Ролик процесса: подгружаем при подходе к экрану ── */
+  /* ── Ролик процесса: строго отрезок 28–60 с, по кругу ──────────────────
+     Параметрами URL это не делается: YouTube применяет start/end только к
+     первому проигрыванию, а при loop крутит ролик целиком с нуля. Поэтому
+     берём плеерный API и перематываем на 28-ю секунду сами, как только
+     дошли до 60-й. Плеер поднимаем при подходе к экрану — он весит сотни
+     килобайт, грузить его сразу незачем. */
   var vbox = document.getElementById("vbox");
   if (vbox) {
+    var FROM = 28, TO = 60, ytPlayer = null, ytTimer = 0;
+
+    function buildPlayer() {
+      var host = document.createElement("div");
+      vbox.appendChild(host);
+      ytPlayer = new YT.Player(host, {
+        host: "https://www.youtube-nocookie.com",
+        videoId: "WS3gQj_FQjI",
+        playerVars: { start: FROM, end: TO, autoplay: 1, mute: 1, controls: 0,
+                      rel: 0, playsinline: 1, disablekb: 1, fs: 0, iv_load_policy: 3 },
+        events: {
+          onReady: function (e) {
+            e.target.mute(); e.target.playVideo();
+            ytTimer = setInterval(function () {
+              if (!ytPlayer || !ytPlayer.getCurrentTime) return;
+              var t = ytPlayer.getCurrentTime();
+              if (t >= TO || t < FROM - 1) ytPlayer.seekTo(FROM, true);
+            }, 250);
+          },
+          onStateChange: function (e) {
+            /* доиграл до end — YouTube ставит ENDED, возвращаем на начало отрезка */
+            if (e.data === YT.PlayerState.ENDED) { ytPlayer.seekTo(FROM, true); ytPlayer.playVideo(); }
+          }
+        }
+      });
+    }
+
     var loadVid = function () {
-      if (vbox.firstChild) return;
-      var f = document.createElement("iframe");
-      f.src = "https://www.youtube-nocookie.com/embed/WS3gQj_FQjI"
-            + "?start=28&end=60&autoplay=1&mute=1&loop=1&playlist=WS3gQj_FQjI"
-            + "&controls=0&modestbranding=1&rel=0&playsinline=1&disablekb=1";
-      f.title = "Ремонт под ключ — процесс работ";
-      f.allow = "autoplay; encrypted-media; picture-in-picture";
-      f.setAttribute("loading", "lazy");
-      f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
-      vbox.appendChild(f);
+      if (vbox.dataset.on) return; vbox.dataset.on = "1";
+      if (window.YT && window.YT.Player) return buildPlayer();
+      var prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function () { if (prev) prev(); buildPlayer(); };
+      var sc = document.createElement("script");
+      sc.src = "https://www.youtube.com/iframe_api"; sc.async = 1;
+      document.head.appendChild(sc);
     };
+
     if (window.IntersectionObserver) {
       var vio = new IntersectionObserver(function (es) {
         if (es[0].isIntersecting) { loadVid(); vio.disconnect(); }
