@@ -678,12 +678,15 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    YouTube рисует шапку с названием и логотип, параметрами это не убирается:
    плеер чуть крупнее рамки (110%) и подрезан краями — уходит ~5% кадра
    вместо прежних 40%. Вставляем при подходе к экрану — iframe тяжёлый. */
-.form-g{grid-template-columns:minmax(0,1fr)}          /* телефон: одна колонка */
-@media(min-width:900px){
+.form-g{grid-template-columns:minmax(0,1fr)}          /* телефон и узкий ноут: одна колонка */
+@media(min-width:1180px){
   /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
-     На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились. */
-  .form-g{grid-template-columns:minmax(0,1fr) minmax(0,380px);align-items:start}
-  .vwrap{grid-column:1;grid-row:1;margin:0}
+     На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились.
+     Порог 1180, а не 900: уже кадр 16:9 становится настолько ниже квиза, что
+     полоса этапов раздувалась до 250px пустоты. Там ролик идёт сверху во всю
+     ширину — так честнее и ровнее, чем растягивать что-то из двух. */
+  .form-g{grid-template-columns:minmax(0,1fr) minmax(0,380px);align-items:stretch}
+  .vwrap{grid-column:1;grid-row:1;margin:0;height:100%}
   /* Шаги квиза разной высоты (у 4-го вопрос в три строки). Без min-height
      карточка прыгала бы на каждом клике и дёргала за собой всё, что ниже. */
   .quiz{grid-column:2;grid-row:1;min-height:545px}
@@ -703,14 +706,23 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 /* Телефон в контактах не переносим */
 .tel-xl{white-space:nowrap}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
-  background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);
+  background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);display:flex;flex-direction:column;
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
-.vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12}
+.vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12;flex:none}
 .vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   aspect-ratio:16/9;width:110%;height:auto;border:0;pointer-events:none}
 .vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
   display:flex;flex-direction:column;gap:3px;
   background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
+/* Полоса этапов под кадром. Кадр держит 16:9 и потому ниже квиза — этой
+   полосой левая колонка добирает высоту, и низы карточек сходятся ровно.
+   Заодно объясняет, что именно мелькает в ускоренной съёмке. */
+.vstages{flex:1;display:flex;flex-wrap:wrap;align-items:center;align-content:center;
+  gap:7px 8px;padding:14px 18px;border-top:1px solid var(--hair)}
+.vstages i{width:100%;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim)}
+.vstages span{font-size:12.4px;font-weight:600;color:var(--ink2,#C8CDD6);white-space:nowrap;
+  padding:7px 12px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.035)}
 .vcap b{font-size:15px;font-weight:700;color:#fff}
 .vcap span{font-size:12.6px;color:rgba(255,255,255,.72);line-height:1.45}
 
@@ -1224,8 +1236,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     </div>
     <div class="form-g">
             <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
-  <div class="vbox" id="vbox"></div>
-  <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
+  <div class="vbox" id="vbox"><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
+  <div class="vstages"><i>в ролике по порядку</i><span>Демонтаж</span><span>Электрика и сантехника</span><span>Стяжка и штукатурка</span><span>Чистовая отделка</span></div>
 </div>
       <form class="panel rv quiz" id="lead" novalidate>
 <div class="qz-top"><span class="qz-step" id="qz-num">Шаг 1 из 4</span><div class="qz-bar"><i id="qz-fill"></i></div></div>
