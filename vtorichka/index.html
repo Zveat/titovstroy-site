@@ -28,7 +28,18 @@ ym(111433298, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true,
 window.ymGoal = function(name, params){
   try { if (window.ym && window.YM_ID) window.ym(window.YM_ID, "reachGoal", name, params); } catch(e){}
 };
-</script><noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
+</script>
+<script>
+/* META PIXEL. PageView шлём на всех страницах, а событие Lead — только на
+   посадочных вторички и новостроек и только после ответа /api/lead, то есть
+   после реально созданной сделки в Битрикс. Рядом с открытием WhatsApp
+   события Lead быть не должно: иначе Meta оптимизирует показы на клики,
+   а не на заявки, и деньги уходят на тех, кто просто жмёт кнопку. */
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+fbq("init", "882275444722440");
+fbq("track", "PageView");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
 <title>Ремонт квартиры на вторичке под ключ в Караганде — без предоплаты</title>
 <meta name="description" content="Ремонт вторичного жилья под ключ в Караганде: демонтаж, электрика, сантехника, отделка, уборка. Оплата за принятые этапы, договор, гарантия 12 месяцев. Бесплатный замер: +7 705 926 21 39.">
 <meta name="theme-color" content="#0A0D12">
@@ -1280,6 +1291,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     <input id="f-name" name="name" type="text" placeholder="Имя" autocomplete="name" required></div>
   <div class="fld"><label for="f-tel">Телефон для связи</label>
     <input id="f-tel" name="tel" type="tel" placeholder="+7 (___) ___ __ __" autocomplete="tel" inputmode="tel" required></div>
+  <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true"
+         style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" value="">
   <button class="b b-brass b-w mag" type="submit">Записаться на замер</button>
 </div>
 
@@ -1322,6 +1335,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   <a class="w" href="https://wa.me/77079824915?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D0%B7%D0%B0%D0%BC%D0%B5%D1%80" target="_blank" rel="noopener">WhatsApp</a>
 </nav>
 
+<script src="/lib/lead-client.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1894,23 +1908,67 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       });
     });
 
+    /* Заявка уходит в /api/lead и создаёт сделку в Битрикс. WhatsApp здесь
+       больше не открывается: события ymGoal("lead") и fbq Lead стоят ТОЛЬКО
+       в ветке успеха, после подтверждения от сервера. Если повесить их рядом
+       с window.open(wa.me), Meta считает заявкой сам клик по кнопке и учится
+       приводить тех, кто жмёт и уходит. Направление (Квартира — вторичка) передаём
+       жёстко по странице, чтобы менеджер видел его в карточке сделки. */
+    var OBJ = "Квартира — вторичка", LEAD_NAME = "Заявка на замер — вторичка", LEAD_CAT = "Вторичка";
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var name = form.name.value.trim(), tel = form.tel.value.trim();
+      var fName = form.querySelector("#f-name"), fTel = form.querySelector("#f-tel"),
+          fHoney = form.querySelector("#f-website"),
+          btn = form.querySelector('button[type="submit"]');
+      var name = fName.value.trim(), tel = fTel.value.trim();
+
       if (!name || !tel) {
         note.textContent = "Укажите имя и телефон — без них мы не сможем перезвонить.";
         note.style.color = "#B8863B";
-        (!name ? form.name : form.tel).focus(); return;
+        (!name ? fName : fTel).focus(); return;
       }
-      var text = "Здравствуйте! Заявка на бесплатный замер.\n"
-        + "Имя: " + name + "\nТелефон: " + tel
-        + "\nОбъект: " + (answers.obj || "не указан")
-        + "\nПлощадь: " + (answers.area || "не указана")
-        + "\nСтарт: " + (answers.when || "не указан");
-      ymGoal("lead");
-      window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
-      note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
-      note.style.color = "#B8863B";
+      /* Казахстанский номер: +7…, 7… или 8… и 11 цифр всего. Проверяем до
+         отправки, чтобы человек не ждал ответа сервера ради опечатки. */
+      var digits = tel.replace(/\D/g, "");
+      if (!/^[78]\d{10}$/.test(digits)) {
+        note.textContent = "Проверьте номер — нужен казахстанский, например +7 705 926 21 39.";
+        note.style.color = "#B8863B"; fTel.focus(); return;
+      }
+      if (btn.disabled) return;                       /* защита от двойного клика */
+      var label = btn.textContent;
+      btn.disabled = true; btn.textContent = "Отправляем…";
+      note.textContent = "Отправляем заявку…"; note.style.color = "";
+
+      window.TitovLeadClient.submitWebsiteLead(window.fetch.bind(window), {
+        name: name,
+        tel: tel,
+        answers: {
+          obj: OBJ,
+          area: answers.area || "не указана",
+          when: answers.when || "не указан"
+        },
+        website: fHoney ? fHoney.value : ""
+      }).then(function () {
+        /* Сделка создана — только теперь цели. */
+        ymGoal("lead");
+        if (window.fbq) {
+          fbq("track", "Lead", { content_name: LEAD_NAME, content_category: LEAD_CAT });
+        }
+        var pane = form.querySelector('.qz-pane[data-s="4"]');
+        if (pane) pane.hidden = true;
+        if (back) back.hidden = true;
+        note.textContent = "Заявка принята — перезвоним в рабочее время и согласуем удобное время замера.";
+        note.style.color = "#1F7A4D";
+      })["catch"](function () {
+        /* Сделки нет — значит и события нет. Но заявку не теряем: даём
+           позвонить и написать вручную. Lead по этим кнопкам НЕ шлём. */
+        btn.disabled = false; btn.textContent = label;
+        note.innerHTML = 'Не получилось отправить. Позвоните <a href="tel:+77059262139">+7 705 926 21 39</a>'
+          + ' или напишите в <a href="https://wa.me/' + WA + '" target="_blank" rel="noopener">WhatsApp</a>'
+          + ' — примем заявку вручную.';
+        note.style.color = "#B8863B";
+      });
     });
   }
 })();

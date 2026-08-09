@@ -28,7 +28,18 @@ ym(111433298, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true,
 window.ymGoal = function(name, params){
   try { if (window.ym && window.YM_ID) window.ym(window.YM_ID, "reachGoal", name, params); } catch(e){}
 };
-</script><noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
+</script>
+<script>
+/* META PIXEL. PageView шлём на всех страницах, а событие Lead — только на
+   посадочных вторички и новостроек и только после ответа /api/lead, то есть
+   после реально созданной сделки в Битрикс. Рядом с открытием WhatsApp
+   события Lead быть не должно: иначе Meta оптимизирует показы на клики,
+   а не на заявки, и деньги уходят на тех, кто просто жмёт кнопку. */
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+fbq("init", "882275444722440");
+fbq("track", "PageView");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
 <title>Сколько стоит ремонт квартиры в Караганде — калькулятор и смета</title>
 <meta name="description" content="Сколько стоит ремонт квартиры в Караганде: посчитайте вилку по площади и объёму работ прямо на сайте. Смета по позициям, фиксируется договором, оплата за принятые этапы. Бесплатный замер: +7 705 926 21 39.">
 <meta name="theme-color" content="#0A0D12">
