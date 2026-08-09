@@ -666,6 +666,19 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 @media(hover:none){.tilt:active{transform:scale(.985);transition:transform .12s}}
 
 
+
+/* 14. Немой ускоренный процесс рядом с квизом: пока человек отвечает, он видит,
+   как идёт работа. Плеер вставляем ТОЛЬКО когда блок подошёл к экрану —
+   iframe YouTube весит сотни килобайт, грузить его сразу незачем.
+   Домен youtube-nocookie: без рекламных кук до старта просмотра. */
+.vwrap{margin-bottom:18px;border-radius:18px;overflow:hidden;border:1px solid var(--hair);
+  background:#0E121A;box-shadow:0 24px 60px -30px rgba(0,0,0,.9)}
+.vbox{position:relative;aspect-ratio:16/9;background:#0A0D12}
+.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.vcap{padding:12px 15px 14px;display:flex;flex-direction:column;gap:3px}
+.vcap b{font-size:14px;font-weight:700;color:var(--snow)}
+.vcap span{font-size:12.4px;color:var(--dim);line-height:1.45}
+
 /* 13. Квиз вместо формы: человек отвечает на короткие вопросы и втягивается,
    а мы получаем объём заявки ещё до звонка. Телефон спрашиваем последним —
    когда уже вложился в ответы, оставить его психологически легче. */
@@ -1212,7 +1225,11 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   <p class="fnote" id="fnote">Четыре коротких вопроса — так мы сразу поймём объём и не будем гонять вас по мелочам.</p>
 </div>
 </form>
-      <div class="rv rv-d1">
+      <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
+  <div class="vbox" id="vbox"></div>
+  <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
+</div>
+<div class="rv rv-d1">
         <span class="kicker">Или сразу напрямую</span>
         <div style="margin-top:14px"><a class="tel-xl" href="tel:+77059262139">+7 705 926 21 39</a></div>
         <div class="hero-cta" style="margin-top:18px">
@@ -1749,6 +1766,29 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     else if (a.id === "calc-send") ym("calc_send");
     else if (href.indexOf("#zayavka") > -1) ym("cta_zamer");
   }, { passive: true });
+
+  /* ── Ролик процесса: подгружаем при подходе к экрану ── */
+  var vbox = document.getElementById("vbox");
+  if (vbox) {
+    var loadVid = function () {
+      if (vbox.firstChild) return;
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/WS3gQj_FQjI"
+            + "?start=28&end=60&autoplay=1&mute=1&loop=1&playlist=WS3gQj_FQjI"
+            + "&controls=0&modestbranding=1&rel=0&playsinline=1&disablekb=1";
+      f.title = "Ремонт под ключ — процесс работ";
+      f.allow = "autoplay; encrypted-media; picture-in-picture";
+      f.setAttribute("loading", "lazy");
+      f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+      vbox.appendChild(f);
+    };
+    if (window.IntersectionObserver) {
+      var vio = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { loadVid(); vio.disconnect(); }
+      }, { rootMargin: "300px" });
+      vio.observe(vbox);
+    } else { loadVid(); }
+  }
 
   /* ── Квиз ──────────────────────────────────────────────────────────────
      Шаги 1–3 отвечаются одним касанием и сразу листают вперёд. Контакты —
