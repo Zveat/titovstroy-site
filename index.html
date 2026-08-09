@@ -1249,6 +1249,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     <input id="f-name" name="name" type="text" placeholder="Имя" autocomplete="name" required></div>
   <div class="fld"><label for="f-tel">Телефон для связи</label>
     <input id="f-tel" name="tel" type="tel" placeholder="+7 (___) ___ __ __" autocomplete="tel" inputmode="tel" required></div>
+  <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden">
+    <label for="f-website">Не заполняйте это поле</label>
+    <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+  </div>
   <button class="b b-brass b-w mag" type="submit">Записаться на замер</button>
 </div>
 
@@ -1291,6 +1295,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   <a class="w" href="https://wa.me/77079824915?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D0%B7%D0%B0%D0%BC%D0%B5%D1%80" target="_blank" rel="noopener">WhatsApp</a>
 </nav>
 
+<script src="/lib/lead-client.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1880,23 +1885,34 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       });
     });
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
-      var name = form.name.value.trim(), tel = form.tel.value.trim();
+      var nameField = form.elements.name, telField = form.elements.tel,
+          submit = form.querySelector('button[type="submit"]'),
+          name = nameField.value.trim(), tel = telField.value.trim();
       if (!name || !tel) {
         note.textContent = "Укажите имя и телефон — без них мы не сможем перезвонить.";
         note.style.color = "#B8863B";
-        (!name ? form.name : form.tel).focus(); return;
+        (!name ? nameField : telField).focus(); return;
       }
-      var text = "Здравствуйте! Заявка на бесплатный замер.\n"
-        + "Имя: " + name + "\nТелефон: " + tel
-        + "\nОбъект: " + (answers.obj || "не указан")
-        + "\nПлощадь: " + (answers.area || "не указана")
-        + "\nСтарт: " + (answers.when || "не указан");
-      ym("lead");
-      window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
-      note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
-      note.style.color = "#B8863B";
+      if (submit) { submit.disabled = true; submit.textContent = "Отправляем…"; }
+      try {
+        await window.TitovLeadClient.submitWebsiteLead(window.fetch, {
+          name: name,
+          tel: tel,
+          answers: answers,
+          website: form.elements.website.value
+        });
+        ym("lead");
+        note.textContent = "Заявка принята. Менеджер свяжется с вами, чтобы согласовать замер.";
+        note.style.color = "#B8863B";
+        form.reset(); answers = {}; started = false; show(1);
+      } catch (_) {
+        note.textContent = "Не удалось отправить заявку. Попробуйте ещё раз или напишите нам в WhatsApp.";
+        note.style.color = "#B8863B";
+      } finally {
+        if (submit) { submit.disabled = false; submit.textContent = "Записаться на замер"; }
+      }
     });
   }
 })();
