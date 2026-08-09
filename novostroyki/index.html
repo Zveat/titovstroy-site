@@ -469,11 +469,17 @@ input[type=range]::-moz-range-thumb{width:22px; height:22px; border-radius:50%; 
 .dir{position:relative; border-radius:22px; overflow:hidden; min-height:420px; display:flex;
   align-items:flex-end; isolation:isolate; border:1px solid rgba(10,13,18,.08)}
 .dir .ph{position:absolute; inset:0; z-index:0;
-  transition:transform 1.1s cubic-bezier(.2,.8,.2,1), filter .6s; filter:grayscale(.25)}
+  transition:transform 1.1s cubic-bezier(.2,.8,.2,1), filter .6s; filter:grayscale(.25) brightness(.84)}
 .dir:hover .ph{transform:scale(1.07); filter:grayscale(0)}
 .dir::after{content:""; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(180deg,rgba(10,13,18,0) 26%,rgba(10,13,18,.55) 56%,rgba(10,13,18,.94) 100%)}
+  background:linear-gradient(180deg,rgba(10,13,18,0) 14%,rgba(10,13,18,.42) 46%,rgba(10,13,18,.88) 74%,rgba(10,13,18,.97) 100%)}
 .dir-b{position:relative; z-index:2; padding:22px; color:#fff; width:100%}
+/* Подложка привязана к самому тексту, а не к проценту высоты карточки:
+   список пунктов раскрыт всегда, блок уезжает вверх, и градиент карточки
+   в этом месте ещё прозрачный — белый текст ложился на светлое фото. */
+.dir-b::before{content:""; position:absolute; left:0; right:0; bottom:0; top:-52px; z-index:-1;
+  background:linear-gradient(180deg,rgba(10,13,18,0),rgba(10,13,18,.72) 34%,rgba(10,13,18,.9) 100%)}
+.dir-b h3,.dir-b p,.dir-b li{text-shadow:0 1px 10px rgba(10,13,18,.5)}
 .dir-b h3{margin:0 0 8px}
 .dir-b p{font-size:13.6px; color:#C6CCD8; line-height:1.5}
 .dir-b ul{margin:14px 0 0; padding:14px 0 0; list-style:none; border-top:1px solid rgba(255,255,255,.14);
@@ -808,7 +814,41 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   font-family:var(--display);white-space:nowrap}
 /* Итог и суммы разделов не переносим: символ ₸ уезжал на вторую строку */
 .kp-t tfoot td,.kp-t tr.ds td:last-child{white-space:nowrap}
-.kp-note{max-width:880px;margin:12px auto 0;font-size:12.2px;line-height:1.5;color:#6B7280}
+/* Подпись — под документом, а не внутри него: раньше текст упирался
+   в края карточки и налезал на скруглённый угол. */
+.kp-note{max-width:880px;margin:13px auto 0;padding:0 2px;font-size:12.2px;
+  line-height:1.55;color:#6B7280}
+
+/* На телефоне таблица не помещается: колонки «Цена» и «Сумма» уезжали за
+   край, и человек видел только названия работ — то есть ровно не то, ради
+   чего блок сделан. Поэтому ниже 620px строка перестаёт быть строкой и
+   становится карточкой: раздел, работа, под ней «объём × цена» и справа
+   сумма. Горизонтальной прокрутки не остаётся. */
+@media(max-width:620px){
+  .kp-scroll{overflow:visible}
+  .kp-t{min-width:0;display:block;font-size:13px}
+  .kp-t thead{display:none}
+  .kp-t tbody,.kp-t tfoot{display:block}
+  .kp-t tbody tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;
+    padding:10px 13px;border-bottom:1px solid rgba(10,13,18,.07)}
+  .kp-t td{display:block;padding:0;border:0;text-align:left}
+  .kp-t .dn{order:1;width:20px;flex:none;font-size:11.5px;line-height:1.5}
+  .kp-t .dr{order:2;width:calc(100% - 26px);font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;white-space:normal}
+  .kp-t .dm{order:3;width:100%;padding-left:26px;max-width:none;line-height:1.35;margin-top:2px}
+  .kp-t .dq{order:4;margin-left:26px;margin-top:5px;color:#6B7280}
+  .kp-t .du{order:5;margin-top:5px;color:#6B7280}
+  .kp-t .dp{order:6;margin-top:5px;color:#6B7280}
+  .kp-t .dp::before{content:"×";margin-right:5px;color:#B3B8BF}
+  .kp-t .dt{order:7;margin-left:auto;margin-top:5px;font-size:13.5px}
+  /* Шапка раздела и итог — в одну строку «название … сумма» */
+  .kp-t tr.ds,.kp-t tfoot tr{display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:9px 13px}
+  .kp-t tr.ds td,.kp-t tfoot td{padding:0}
+  .kp-t tfoot td:last-child{font-size:15px}
+  .kp-t tr.dmore{display:block;padding:6px 13px;text-align:center}
+  .kp-t tr.dmore td{text-align:center;padding:0}
+}
 
 .ex-g{display:grid;gap:13px}
 @media(min-width:640px){.ex-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -873,7 +913,9 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .hdr-nav a::after{left:50%;right:50%;transition:left .28s,right .28s}
 .hdr-nav a:hover::after{left:0;right:0}
 
-/* 10. Сноска у калькулятора: цифры — ориентир, не оферта. */
+/* 10. Оставлено от калькулятора: правила .calc-warn больше не применяются
+   (сам блок убран), но рядом лежат используемые селекторы — не трогаем.
+   Прежнее назначение: сноска о том, что цифры ориентир, а не оферта. */
 .calc-warn{margin:12px 0 0;padding:12px 14px;border-radius:14px;
   background:rgba(224,180,98,.12);border:1px solid rgba(224,180,98,.42);
   font-size:12.6px;line-height:1.5;color:#5A4526;display:flex;gap:9px;align-items:flex-start}
@@ -924,7 +966,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     <span class="wm">TitovStroy <i>Караганда</i></span>
     <span class="sp"></span>
     <nav class="hdr-nav">
-      <a href="/">Главная</a><a href="/vtorichka">Вторичка</a><a href="/novostroyki">Новостройки</a><a href="/kommercia">Коммерция</a><a href="/ceny">Цены</a><a href="#calc">Расчёт</a><a href="#otzyvy">Отзывы</a><a href="#cases">Работы</a><a href="#dirs">Услуги</a><a href="#faq">Вопросы</a>
+      <a href="/">Главная</a><a href="/vtorichka">Вторичка</a><a href="/novostroyki">Новостройки</a><a href="/kommercia">Коммерция</a><a href="/ceny">Цены</a><a href="#calc">Пример сметы</a><a href="#otzyvy">Отзывы</a><a href="#cases">Работы</a><a href="#dirs">Услуги</a><a href="#faq">Вопросы</a>
     </nav>
     <a class="hdr-tel" href="tel:+77059262139">+7 705 926 21 39</a>
     <a class="b b-brass b-sm mag" href="#zayavka">Замер бесплатно</a>
@@ -959,7 +1001,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       <p class="lead">Забираем квартиру с черновой отделки и доводим до готового жилья. Ход работ видно в личном кабинете — с телефона, в любой момент.</p>
       <div class="hero-cta">
         <a class="b b-brass mag" href="#zayavka">Замер бесплатно</a>
-        <a class="b b-ghost mag" href="#calc">Посчитать стоимость</a>
+        <a class="b b-ghost mag" href="#calc">Посмотреть пример сметы</a>
       </div>
       <div class="pills"><span>Без предоплаты</span><span>Договор</span><span>Гарантия 12 месяцев</span></div>
     </div>
@@ -1027,8 +1069,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
           <tfoot><tr><td colspan="6">Итого по смете</td><td>4 016 700 ₸</td></tr></tfoot>
         </table>
       </div>
-      <p class="kp-note"><b>Цифры в примере округлены и не являются офертой.</b> Состав и структура работ — как в реальной смете: показаны 6 позиций из 22, остальные свёрнуты. Ваша сумма считается по вашим объёмам после замера. Стоимость материалов в смету работ не входит.</p>
     </div>
+      <p class="kp-note"><b>Цифры в примере округлены и не являются офертой.</b> Состав и структура работ — как в реальной смете: показаны 6 позиций из 22, остальные свёрнуты. Ваша сумма считается по вашим объёмам после замера. Стоимость материалов в смету работ не входит.</p>
 
     <div class="head rv rv-d1" style="margin-top:clamp(34px,4vw,54px)">
       <span class="kicker">Порядок сумм</span>
@@ -1846,7 +1888,6 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     var href = a.getAttribute("href") || "";
     if (href.indexOf("wa.me") > -1) ymGoal("whatsapp");
     else if (href.indexOf("tel:") === 0) ymGoal("call");
-    else if (a.id === "calc-send") ymGoal("calc_send");
     else if (href.indexOf("#zayavka") > -1) ymGoal("cta_zamer");
   }, { passive: true });
 
@@ -2039,7 +2080,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   }
 
   /* ── Наклон за курсором ── */
-  var cards = document.querySelectorAll(".dir, .pc, .vid, .case-b, .magnet");
+  /* .kp — карточка сметы: наклон и блик как у блока замера */
+  var cards = document.querySelectorAll(".dir, .pc, .vid, .case-b, .magnet, .kp");
   cards.forEach(function (el) { el.classList.add("tilt"); });
   if (!fine) return;                 /* дальше — только там, где есть курсор */
   cards.forEach(function (el) {
