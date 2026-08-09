@@ -3,23 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><script>
-/* ЯНДЕКС.МЕТРИКА. Номер счётчика подставить сюда ↓ (создаётся на metrika.yandex.ru).
-   Пока стоит 0 — счётчик не грузится и цели молчат, сайт работает как обычно. */
+/* ЯНДЕКС.МЕТРИКА — код счётчика ровно в том виде, как его выдаёт Метрика.
+   НЕ ПЕРЕОПРЕДЕЛЯТЬ window.ym. tag.js после загрузки читает ym.a (очередь
+   вызовов, накопленных до загрузки) и ym.l (момент старта). Обёртка поверх ym
+   стирала эти свойства — вызов "init" терялся, счётчик не поднимался, данных
+   не было и проверка самой Метрики не проходила. Цели шлём отдельным
+   хелпером ymGoal(), сам ym не трогаем. */
 window.YM_ID = 111433298;
-(function(){ if(!window.YM_ID) { window.ym = function(){}; return; }
-  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-  m[i].l=1*new Date();for(var j=0;j<e.length;j++){if(e[j].src===r){return}}
-  k=document.createElement(t),a=document.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-  (window,document.scripts,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-  ym(window.YM_ID,"init",{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
-    referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
-})();
-/* Короткая обёртка: ym("lead") вместо длинной формы вызова цели */
-(function(){ var raw = window.ym;
-  window.ym = function(a,b,c,d){ if(!window.YM_ID) return;
-    if(typeof a==="string"&&b===undefined) return raw(window.YM_ID,"reachGoal",a);
-    return raw(a,b,c,d); };
-})();
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(111433298, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+
+/* Короткая форма для целей: ymGoal("lead"). Работает и если Метрика не
+   загрузилась (блокировщик, офлайн) — молча ничего не делает. */
+window.ymGoal = function(name, params){
+  try { if (window.ym && window.YM_ID) window.ym(window.YM_ID, "reachGoal", name, params); } catch(e){}
+};
 </script><noscript><div><img src="https://mc.yandex.ru/watch/111433298" style="position:absolute;left:-9999px" alt=""></div></noscript><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23ffffff'/><path fill='%230A0D12' d='M19 17H81V33H58.5V83H41.5V33H19Z'/></svg>">
 <title>Ремонт ванной и санузла под ключ в Караганде — плитка, сантехника</title>
 <meta name="description" content="Ремонт ванной и санузла под ключ в Караганде: демонтаж, гидроизоляция, разводка сантехники, укладка плитки, установка приборов. Без предоплаты, договор, гарантия 12 месяцев. Бесплатный замер: +7 705 926 21 39.">
@@ -667,31 +670,65 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
 
 
-/* 14. Ролик — вертикальным полотном слева от квиза, во всю его высоту.
-   YouTube всегда рисует шапку с названием и логотип, параметрами не убрать:
-   растягиваем плеер крупнее рамки и обрезаем краями, в кадре только картинка.
-   Вставляем при подходе к экрану — iframe весит сотни килобайт. */
-.form-g{grid-template-columns:minmax(0,1fr)}          /* телефон: одна колонка */
-@media(min-width:900px){
+/* 14. Ролик — широким кадром слева от квиза.
+   Раньше он тянулся во всю высоту квиза и получался почти квадратом: кадр
+   16:9 в такой рамке обрезался по бокам больше чем наполовину, разобрать
+   в нём было нечего. Теперь наоборот — ролику отдана вся свободная ширина,
+   рамка держит 16:9, а по высоте он просто centruется относительно квиза.
+   YouTube рисует шапку с названием и логотип, параметрами это не убирается:
+   плеер чуть крупнее рамки (110%) и подрезан краями — уходит ~5% кадра
+   вместо прежних 40%. Вставляем при подходе к экрану — iframe тяжёлый. */
+.form-g{grid-template-columns:minmax(0,1fr)}          /* телефон и узкий ноут: одна колонка */
+@media(min-width:1180px){
   /* Две колонки: ролик и квиз. Контакты — отдельной полосой снизу во всю ширину.
-     На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились. */
-  .form-g{grid-template-columns:minmax(0,360px) minmax(0,1fr);align-items:stretch}
-  .vwrap{grid-column:1;grid-row:1;height:100%;margin:0}
-  .quiz{grid-column:2;grid-row:1}
+     На трёх колонках квизу оставалось ~334px: заголовок и телефон переносились.
+     Порог 1180, а не 900: уже кадр 16:9 становится настолько ниже квиза, что
+     полоса этапов раздувалась до 250px пустоты. Там ролик идёт сверху во всю
+     ширину — так честнее и ровнее, чем растягивать что-то из двух. */
+  .form-g{grid-template-columns:minmax(0,1fr) minmax(0,380px);align-items:stretch}
+  .vwrap{grid-column:1;grid-row:1;margin:0;height:100%}
+  /* Шаги квиза разной высоты (у 4-го вопрос в три строки). Без min-height
+     карточка прыгала бы на каждом клике и дёргала за собой всё, что ниже. */
+  .quiz{grid-column:2;grid-row:1;min-height:545px}
   .form-g>.rv.rv-d1{grid-column:1/-1;grid-row:2}
-  .vbox{height:100%;aspect-ratio:auto;min-height:100%}
 }
+
+/* Варианты ответа: в две колонки, когда влезают — список перестаёт быть
+   простынёй, и весь шаг читается одним взглядом. Стрелка появляется на
+   наведении: подсказывает, что клик листает дальше. */
+.qz-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px}
+.qz-o{position:relative;padding-right:38px;line-height:1.3}
+.qz-o::after{content:"→";position:absolute;right:15px;top:50%;transform:translate(-6px,-50%);
+  color:var(--brass3);font-weight:700;opacity:0;transition:opacity .2s,transform .2s}
+.qz-o:hover::after{opacity:1;transform:translate(0,-50%)}
+.qz-o.sel::after{content:"✓";opacity:1;transform:translate(0,-50%);color:#1F7A4D}
+.quiz{justify-content:center}
 /* Телефон в контактах не переносим */
 .tel-xl{white-space:nowrap}
 .vwrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
-  background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);
+  background:#0A0D12;margin:0 0 clamp(20px,3vw,34px);display:flex;flex-direction:column;
   box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
-.vbox{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0A0D12}
+.vbox{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0A0D12;flex:none}
 .vbox iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:16/9;height:132%;width:auto;min-width:132%;border:0;pointer-events:none}
+  aspect-ratio:16/9;width:116%;height:auto;border:0;pointer-events:none}
+/* Шапка плеера (название ролика, аватар канала, кнопка «Смотреть на YouTube»)
+   параметрами не отключается — modestbranding YouTube отменил. Режем её
+   дважды: плеер шире рамки на 16% (верхние ~7% кадра уходят за край) и
+   поверх остатка лежит эта тень. Снизу логотип гасит градиент подписи. */
+.vshade{position:absolute;left:0;right:0;top:0;height:24%;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,#0A0D12 0%,rgba(10,13,18,.92) 34%,rgba(10,13,18,.5) 66%,transparent 100%)}
 .vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:44px 18px 16px;
   display:flex;flex-direction:column;gap:3px;
   background:linear-gradient(180deg,transparent,rgba(10,13,18,.9) 62%)}
+/* Полоса этапов под кадром. Кадр держит 16:9 и потому ниже квиза — этой
+   полосой левая колонка добирает высоту, и низы карточек сходятся ровно.
+   Заодно объясняет, что именно мелькает в ускоренной съёмке. */
+.vstages{flex:1;display:flex;flex-wrap:wrap;align-items:center;align-content:center;
+  gap:7px 8px;padding:14px 18px;border-top:1px solid var(--hair)}
+.vstages i{width:100%;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim)}
+.vstages span{font-size:12.4px;font-weight:600;color:var(--ink2,#C8CDD6);white-space:nowrap;
+  padding:7px 12px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.035)}
 .vcap b{font-size:15px;font-weight:700;color:#fff}
 .vcap span{font-size:12.6px;color:rgba(255,255,255,.72);line-height:1.45}
 
@@ -1193,8 +1230,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
     </div>
     <div class="form-g">
             <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
-  <div class="vbox" id="vbox"></div>
-  <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
+  <div class="vbox" id="vbox"><div class="vshade"></div><div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div></div>
+  <div class="vstages"><i>в ролике по порядку</i><span>Демонтаж</span><span>Электрика и сантехника</span><span>Стяжка и штукатурка</span><span>Чистовая отделка</span></div>
 </div>
       <form class="panel rv quiz" id="lead" novalidate>
 <div class="qz-top"><span class="qz-step" id="qz-num">Шаг 1 из 4</span><div class="qz-bar"><i id="qz-fill"></i></div></div>
@@ -1777,10 +1814,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   document.addEventListener("click", function (e) {
     var a = e.target.closest("a,button"); if (!a) return;
     var href = a.getAttribute("href") || "";
-    if (href.indexOf("wa.me") > -1) ym("whatsapp");
-    else if (href.indexOf("tel:") === 0) ym("call");
-    else if (a.id === "calc-send") ym("calc_send");
-    else if (href.indexOf("#zayavka") > -1) ym("cta_zamer");
+    if (href.indexOf("wa.me") > -1) ymGoal("whatsapp");
+    else if (href.indexOf("tel:") === 0) ymGoal("call");
+    else if (a.id === "calc-send") ymGoal("calc_send");
+    else if (href.indexOf("#zayavka") > -1) ymGoal("cta_zamer");
   }, { passive: true });
 
   /* ── Ролик процесса: строго отрезок 28–60 с, по кругу ──────────────────
@@ -1799,7 +1836,11 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       ytPlayer = new YT.Player(host, {
         host: "https://www.youtube-nocookie.com",
         videoId: "WS3gQj_FQjI",
-        playerVars: { start: FROM, end: TO, autoplay: 1, mute: 1, controls: 0,
+        /* end сюда НЕ передаём: с ним YouTube на 60-й секунде честно завершает
+           ролик и показывает свой финальный экран — название, аватар канала,
+           «Другие видео», логотип. Отрезок держим сами, перематывая до того,
+           как плеер успеет закончиться. */
+        playerVars: { start: FROM, autoplay: 1, mute: 1, controls: 0, loop: 0,
                       rel: 0, playsinline: 1, disablekb: 1, fs: 0, iv_load_policy: 3 },
         events: {
           onReady: function (e) {
@@ -1807,12 +1848,17 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
             ytTimer = setInterval(function () {
               if (!ytPlayer || !ytPlayer.getCurrentTime) return;
               var t = ytPlayer.getCurrentTime();
-              if (t >= TO || t < FROM - 1) ytPlayer.seekTo(FROM, true);
+              /* Перематываем с запасом в четверть секунды до TO: если дать
+                 плееру дойти до конца ролика, он покажет свою концовку. */
+              if (t >= TO - 0.25 || t < FROM - 1) ytPlayer.seekTo(FROM, true);
             }, 250);
           },
           onStateChange: function (e) {
-            /* доиграл до end — YouTube ставит ENDED, возвращаем на начало отрезка */
+            /* Любая остановка = наш декоративный цикл встал, а YouTube поверх
+               рисует название с аватаром. Сразу возвращаем на начало отрезка
+               и продолжаем — экран окончания просто не успевает появиться. */
             if (e.data === YT.PlayerState.ENDED) { ytPlayer.seekTo(FROM, true); ytPlayer.playVideo(); }
+            else if (e.data === YT.PlayerState.PAUSED) { ytPlayer.playVideo(); }
           }
         }
       });
@@ -1853,14 +1899,14 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       num.textContent = "Шаг " + step + " из 4";
       back.hidden = step === 1;
       if (step === 4) { var i = form.querySelector("#f-name"); if (i) setTimeout(function () { i.focus(); }, 120); }
-      ym("quiz_step" + step);
+      ymGoal("quiz_step" + step);
     }
     back.addEventListener("click", function () { show(step - 1); });
 
     form.querySelectorAll(".qz-opts").forEach(function (g) {
       g.addEventListener("click", function (e) {
         var b = e.target.closest(".qz-o"); if (!b) return;
-        if (!started) { started = true; ym("quiz_start"); }
+        if (!started) { started = true; ymGoal("quiz_start"); }
         [].forEach.call(g.children, function (c) { c.classList.remove("sel"); });
         b.classList.add("sel");
         answers[g.dataset.k] = b.textContent.trim();
@@ -1881,7 +1927,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
         + "\nОбъект: " + (answers.obj || "не указан")
         + "\nПлощадь: " + (answers.area || "не указана")
         + "\nСтарт: " + (answers.when || "не указан");
-      ym("lead");
+      ymGoal("lead");
       window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text), "_blank", "noopener");
       note.textContent = "Заявка открыта в WhatsApp — отправьте сообщение, и мы согласуем время.";
       note.style.color = "#B8863B";
