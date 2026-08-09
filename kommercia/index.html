@@ -772,8 +772,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
    Классы с префиксом kp-: .doc на сайте уже занят блоком документов. */
 .kp{background:#FFFDF8;border:1px solid rgba(10,13,18,.10);border-radius:22px;overflow:hidden;
   box-shadow:0 40px 90px -55px rgba(10,13,18,.55)}
-.kp-h{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
-  padding:20px clamp(16px,2.4vw,26px);background:#0A0D12}
+.kp-h{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  padding:15px clamp(14px,2vw,22px);background:#0A0D12}
 .kp-h b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(17px,2vw,20px);
   letter-spacing:-.02em;color:#fff}
 .kp-h span{font-size:13px;color:rgba(255,255,255,.6)}
@@ -784,24 +784,24 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   color:var(--brass);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 /* Таблица шире телефона — крутим её внутри карточки, а не всю страницу */
 .kp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.kp-t{width:100%;border-collapse:collapse;font-size:13.6px;min-width:680px;
+.kp-t{width:100%;border-collapse:collapse;font-size:12.8px;min-width:640px;
   font-variant-numeric:tabular-nums}
-.kp-t th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A8F98;font-weight:700;
-  text-align:left;padding:11px 12px;background:#F4F0E7;border-bottom:1px solid rgba(10,13,18,.10)}
-.kp-t td{padding:11px 12px;border-bottom:1px solid rgba(10,13,18,.06);color:#1A1F27;vertical-align:top}
+.kp-t th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8A8F98;font-weight:700;
+  text-align:left;padding:9px 11px;background:#F4F0E7;border-bottom:1px solid rgba(10,13,18,.10)}
+.kp-t td{padding:8px 11px;border-bottom:1px solid rgba(10,13,18,.06);color:#1A1F27;vertical-align:top}
 .kp-t tbody tr:hover td{background:rgba(184,134,59,.07)}
 .kp-t .dn{color:#A4A9B1;width:36px}
 .kp-t .dr{color:#8A6420;font-weight:600;white-space:nowrap}
-.kp-t .dm{font-weight:600;min-width:230px;max-width:430px}
+.kp-t .dm{font-weight:600;min-width:210px;max-width:400px}
 .kp-t .du,.kp-t .dq,.kp-t .dp,.kp-t .dt{text-align:right;white-space:nowrap}
 .kp-t .dt{font-weight:800}
 .kp-t tr.ds td{background:#181D26;color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.09em;
-  text-transform:uppercase;padding:10px 12px;border-bottom:0}
+  text-transform:uppercase;padding:8px 11px;border-bottom:0}
 .kp-t tr.ds td:last-child{color:var(--brass);text-align:right;letter-spacing:0;font-size:14px}
 .kp-t tr.ds:hover td{background:#181D26}
 .kp-t tr.dmore td{text-align:center;color:#8A8F98;font-size:12.6px;background:#FAF7F0}
 .kp-t tr.dmore:hover td{background:#FAF7F0}
-.kp-t tfoot td{background:#F4F0E7;font-weight:900;font-size:15px;padding:15px 12px;border-bottom:0;
+.kp-t tfoot td{background:#F4F0E7;font-weight:900;font-size:14px;padding:12px 11px;border-bottom:0;
   text-transform:uppercase;letter-spacing:.06em}
 .kp-t tfoot td:last-child{text-align:right;letter-spacing:0;font-size:18px;font-family:var(--display)}
 .kp-note{margin:14px 4px 0;font-size:12.8px;line-height:1.55;color:#6B7280}
@@ -1000,49 +1000,45 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
     <div class="kp rv">
       <div class="kp-h">
-        <div><b>Ценовое предложение</b><span>вторичка, 61 м² · полный цикл с санузлом под ключ</span></div>
-        <div class="kp-sum"><span>Итого по смете</span><b>4 778 275 ₸</b></div>
+        <div><b>Ценовое предложение</b><span>пример: вторичка 61 м², полный цикл с санузлом под ключ</span></div>
+        <div class="kp-sum"><span>Пример · итого</span><b>4 793 000 ₸</b></div>
       </div>
       <div class="kp-scroll">
         <table class="kp-t">
           <thead><tr><th>№</th><th>Раздел</th><th>Наименование</th><th>Ед.</th><th>Объём</th><th>Цена</th><th>Сумма</th></tr></thead>
           <tbody>
-          <tr class="ds"><td colspan="6">Черновые работы</td><td>2 326 936 ₸</td></tr>
-          <tr><td class="dn">1</td><td class="dr">Демонтаж</td><td class="dm">Снятие обоев (не до основания)</td><td class="du">м²</td><td class="dq">177</td><td class="dp">350</td><td class="dt">61 888</td></tr>
-          <tr><td class="dn">2</td><td class="dr">Демонтаж</td><td class="dm">Снятие старой стяжки (пол до основания)</td><td class="du">м²</td><td class="dq">58</td><td class="dp">7 875</td><td class="dt">456 750</td></tr>
-          <tr><td class="dn">3</td><td class="dr">Выравнивание стен</td><td class="dm">Штукатурка стен (1–3 см)</td><td class="du">м²</td><td class="dq">177</td><td class="dp">2 975</td><td class="dt">526 513</td></tr>
-          <tr><td class="dn">4</td><td class="dr">Выравнивание стен</td><td class="dm">Шпаклёвка стен</td><td class="du">м²</td><td class="dq">177</td><td class="dp">2 100</td><td class="dt">371 700</td></tr>
-          <tr><td class="dn">5</td><td class="dr">Выравнивание пола</td><td class="dm">Стяжка ц/п до 80 мм (под керамзит)</td><td class="du">м²</td><td class="dq">58</td><td class="dp">3 500</td><td class="dt">202 980</td></tr>
-          <tr><td class="dn">6</td><td class="dr">Дополнительно</td><td class="dm">Перегородки из газоблока (монтаж/перенос)</td><td class="du">м²</td><td class="dq">6</td><td class="dp">6 125</td><td class="dt">36 748</td></tr>
-          <tr class="dmore"><td colspan="7">и ещё 6 позиций в этом разделе</td></tr>
-          <tr class="ds"><td colspan="6">Чистовые работы</td><td>1 028 614 ₸</td></tr>
-          <tr><td class="dn">7</td><td class="dr">Стены — Обои</td><td class="dm">Поклейка обоев</td><td class="du">м²</td><td class="dq">177</td><td class="dp">2 275</td><td class="dt">402 737</td></tr>
-          <tr><td class="dn">8</td><td class="dr">Полы — Покрытия</td><td class="dm">Монтаж ламината</td><td class="du">м²</td><td class="dq">58</td><td class="dp">2 450</td><td class="dt">142 080</td></tr>
-          <tr><td class="dn">9</td><td class="dr">Сантехника — Установка</td><td class="dm">Монтаж радиатора (с заменой труб/подводки)</td><td class="du">шт</td><td class="dq">4</td><td class="dp">43 750</td><td class="dt">175 001</td></tr>
-          <tr><td class="dn">10</td><td class="dr">Двери и проёмы</td><td class="dm">Установка межкомнатных дверей (базовые)</td><td class="du">шт</td><td class="dq">5</td><td class="dp">28 000</td><td class="dt">140 002</td></tr>
-          <tr class="dmore"><td colspan="7">и ещё 3 позиции в этом разделе</td></tr>
-          <tr class="ds"><td colspan="6">Санузел под ключ</td><td>1 422 725 ₸</td></tr>
-          <tr><td class="dn">11</td><td class="dr">Основные работы</td><td class="dm">Санузел под ключ: инженерка, гидроизоляция, плитка, чистовая сантехника</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">1 217 391</td><td class="dt">1 217 391</td></tr>
-          <tr><td class="dn">12</td><td class="dr">Основные работы</td><td class="dm">Демонтажно-подготовительные работы, снятие плитки/покрытия стены, снятие плитки пол, гкл конструкций стены и потолок, сантехники, электрики</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">147 000</td><td class="dt">147 000</td></tr>
-          <tr><td class="dn">13</td><td class="dr">Основные работы</td><td class="dm">Вынос и вывоз мусора</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">58 334</td><td class="dt">58 334</td></tr>
+          <tr class="ds"><td colspan="6">Черновые работы</td><td>2 336 200 ₸</td></tr>
+          <tr><td class="dn">1</td><td class="dr">Демонтаж</td><td class="dm">Снятие старой стяжки (пол до основания)</td><td class="du">м²</td><td class="dq">58</td><td class="dp">7 900</td><td class="dt">458 200</td></tr>
+          <tr><td class="dn">2</td><td class="dr">Выравнивание стен</td><td class="dm">Штукатурка стен (1–3 см)</td><td class="du">м²</td><td class="dq">177</td><td class="dp">3 000</td><td class="dt">531 000</td></tr>
+          <tr><td class="dn">3</td><td class="dr">Выравнивание пола</td><td class="dm">Стяжка ц/п до 80 мм (под керамзит)</td><td class="du">м²</td><td class="dq">58</td><td class="dp">3 500</td><td class="dt">203 000</td></tr>
+          <tr class="dmore"><td colspan="7">…и ещё 9 позиций</td></tr>
+          <tr class="ds"><td colspan="6">Чистовые работы</td><td>1 034 100 ₸</td></tr>
+          <tr><td class="dn">4</td><td class="dr">Стены — Обои</td><td class="dm">Поклейка обоев</td><td class="du">м²</td><td class="dq">177</td><td class="dp">2 300</td><td class="dt">407 100</td></tr>
+          <tr><td class="dn">5</td><td class="dr">Полы — Покрытия</td><td class="dm">Монтаж ламината</td><td class="du">м²</td><td class="dq">58</td><td class="dp">2 400</td><td class="dt">139 200</td></tr>
+          <tr><td class="dn">6</td><td class="dr">Двери и проёмы</td><td class="dm">Установка межкомнатных дверей (базовые)</td><td class="du">шт</td><td class="dq">5</td><td class="dp">28 000</td><td class="dt">140 000</td></tr>
+          <tr class="dmore"><td colspan="7">…и ещё 4 позиции</td></tr>
+          <tr class="ds"><td colspan="6">Санузел под ключ</td><td>1 422 700 ₸</td></tr>
+          <tr><td class="dn">7</td><td class="dr">Основные работы</td><td class="dm">Санузел под ключ: инженерка, гидроизоляция, плитка, сантехника</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">1 217 400</td><td class="dt">1 217 400</td></tr>
+          <tr><td class="dn">8</td><td class="dr">Основные работы</td><td class="dm">Демонтаж и подготовка санузла</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">147 000</td><td class="dt">147 000</td></tr>
+          <tr class="dmore"><td colspan="7">…и ещё 1 позиция</td></tr>
           </tbody>
-          <tfoot><tr><td colspan="6">Итого по смете</td><td>4 778 275 ₸</td></tr></tfoot>
+          <tfoot><tr><td colspan="6">Итого по смете</td><td>4 793 000 ₸</td></tr></tfoot>
         </table>
       </div>
-      <p class="kp-note">Настоящий расчёт с нашего объекта: показаны 13 позиций из 22, суммы по разделам и итог — полные. Имя заказчика, телефон и адрес убраны. Стоимость материалов в смету работ не входит.</p>
+      <p class="kp-note"><b>Цифры в примере округлены и не являются офертой.</b> Состав и структура работ — как в реальной смете: показаны 8 позиций из 22, остальные свёрнуты. Ваша сумма считается по вашим объёмам после замера. Стоимость материалов в смету работ не входит.</p>
     </div>
 
     <div class="head rv rv-d1" style="margin-top:clamp(34px,4vw,54px)">
       <span class="kicker">Порядок сумм</span>
       <h2 class="d d3" style="font-size:clamp(23px,2.8vw,33px)">Сколько выходило на других объектах</h2>
-      <p class="lead">Это не прайс и не оферта — наши реальные расчёты, чтобы вы понимали порядок цифр ещё до звонка.</p>
+      <p class="lead">Это не прайс и не оферта. Суммы округлены и показаны только для того, чтобы вы понимали порядок цифр ещё до звонка.</p>
     </div>
 
     <div class="ex-g rv rv-d1">
-      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">61 м²</b><span class="ex-p">22 позиции, с санузлом под ключ</span><b class="ex-s">4 778 275 ₸</b></article>
-      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">56 м²</b><span class="ex-p">29 позиций, с санузлом под ключ</span><b class="ex-s">4 430 561 ₸</b></article>
-      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">51 м²</b><span class="ex-p">21 позиция, с санузлом под ключ</span><b class="ex-s">3 874 573 ₸</b></article>
-      <article class="ex"><span class="ex-t">Комната · косметика</span><b class="ex-a">16 м²</b><span class="ex-p">10 позиций: обои, пол, плинтусы</span><b class="ex-s">389 518 ₸</b></article>
+      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">61 м²</b><span class="ex-p">22 позиции, с санузлом под ключ</span><b class="ex-s">≈ 4,8 млн ₸</b></article>
+      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">56 м²</b><span class="ex-p">29 позиций, с санузлом под ключ</span><b class="ex-s">≈ 4,4 млн ₸</b></article>
+      <article class="ex"><span class="ex-t">Вторичка · полный цикл</span><b class="ex-a">51 м²</b><span class="ex-p">21 позиция, с санузлом под ключ</span><b class="ex-s">≈ 3,9 млн ₸</b></article>
+      <article class="ex"><span class="ex-t">Комната · косметика</span><b class="ex-a">16 м²</b><span class="ex-p">10 позиций: обои, пол, плинтусы</span><b class="ex-s">≈ 390 тыс ₸</b></article>
     </div>
 
     <div class="ex-cta rv rv-d2">
