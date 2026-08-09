@@ -667,17 +667,23 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 
 
 
-/* 14. Немой ускоренный процесс рядом с квизом: пока человек отвечает, он видит,
-   как идёт работа. Плеер вставляем ТОЛЬКО когда блок подошёл к экрану —
-   iframe YouTube весит сотни килобайт, грузить его сразу незачем.
-   Домен youtube-nocookie: без рекламных кук до старта просмотра. */
-.vwrap{margin-bottom:18px;border-radius:18px;overflow:hidden;border:1px solid var(--hair);
-  background:#0E121A;box-shadow:0 24px 60px -30px rgba(0,0,0,.9)}
-.vbox{position:relative;aspect-ratio:16/9;background:#0A0D12}
-.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-.vcap{padding:12px 15px 14px;display:flex;flex-direction:column;gap:3px}
-.vcap b{font-size:14px;font-weight:700;color:var(--snow)}
-.vcap span{font-size:12.4px;color:var(--dim);line-height:1.45}
+/* 14. Немой ускоренный процесс — широким кадром над квизом.
+   YouTube всегда рисует свою шапку с названием и логотип: параметрами их убрать
+   нельзя. Поэтому растягиваем плеер за пределы рамки и обрезаем её краями —
+   в кадре остаётся только картинка. Плеер вставляется при подходе к экрану:
+   iframe весит сотни килобайт, тянуть его сразу незачем. */
+.vwrap{margin:0 0 clamp(22px,3vw,38px);border-radius:20px;overflow:hidden;
+  border:1px solid var(--hair);background:#0A0D12;position:relative;
+  box-shadow:0 30px 80px -40px rgba(0,0,0,.95)}
+.vbox{position:relative;aspect-ratio:16/7;overflow:hidden;background:#0A0D12}
+.vbox iframe{position:absolute;top:50%;left:50%;width:100%;height:190%;
+  transform:translate(-50%,-50%);border:0;pointer-events:none}
+.vcap{position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:34px 20px 16px;display:flex;flex-direction:column;gap:3px;
+  background:linear-gradient(180deg,transparent,rgba(10,13,18,.86) 62%)}
+.vcap b{font-size:15px;font-weight:700;color:#fff}
+.vcap span{font-size:12.6px;color:rgba(255,255,255,.72);line-height:1.45}
+@media(max-width:760px){.vbox{aspect-ratio:16/9}.vbox iframe{height:210%}}
 
 /* 13. Квиз вместо формы: человек отвечает на короткие вопросы и втягивается,
    а мы получаем объём заявки ещё до звонка. Телефон спрашиваем последним —
@@ -1187,7 +1193,11 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       <h2 class="d d2">Вызовите инженера на замер</h2>
       <p class="lead">Инженер приедет, снимет замеры и уточнит объём. Смету по позициям с точной суммой и сроком пришлём после расчёта.</p>
     </div>
-    <div class="form-g">
+    <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
+  <div class="vbox" id="vbox"></div>
+  <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
+</div>
+            <div class="form-g">
       <form class="panel rv quiz" id="lead" novalidate>
 <div class="qz-top"><span class="qz-step" id="qz-num">Шаг 1 из 4</span><div class="qz-bar"><i id="qz-fill"></i></div></div>
 
@@ -1237,11 +1247,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   <p class="fnote" id="fnote">Четыре коротких вопроса — так мы сразу поймём объём и не будем гонять вас по мелочам.</p>
 </div>
 </form>
-      <div class="vwrap rv" id="vwrap" aria-label="Ремонт в ускоренной съёмке">
-  <div class="vbox" id="vbox"></div>
-  <div class="vcap"><b>Так идёт работа</b><span>Полный цикл ремонта в ускоренной съёмке</span></div>
-</div>
-<div class="rv rv-d1">
+      <div class="rv rv-d1">
         <span class="kicker">Или сразу напрямую</span>
         <div style="margin-top:14px"><a class="tel-xl" href="tel:+77059262139">+7 705 926 21 39</a></div>
         <div class="hero-cta" style="margin-top:18px">
