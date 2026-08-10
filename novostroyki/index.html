@@ -791,7 +791,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
   color:var(--brass);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 /* Таблица шире телефона — крутим её внутри карточки, а не всю страницу */
 .kp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.kp-t{width:100%;border-collapse:collapse;font-size:12.2px;min-width:600px;
+.kp-t{width:100%;border-collapse:collapse;font-size:12.2px;min-width:552px;
   font-variant-numeric:tabular-nums}
 .kp-t th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8A8F98;font-weight:700;
   text-align:left;padding:7px 10px;background:#F4F0E7;border-bottom:1px solid rgba(10,13,18,.10)}
@@ -840,6 +840,48 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 @keyframes kpNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 .kp-hint.off{opacity:0;transform:translateY(6px)}
 @media(max-width:900px){.kp-hint{display:inline-flex}}
+
+/* На телефоне таблица должна помещаться целиком, а не уезжать за край.
+   Прячем два наименее нужных столбца — порядковый номер и раздел работ:
+   на узком экране важны наименование, объём, цена и сумма. Колонки исчезают
+   через display:none, поэтому colspan у строк-разделов просто растягивается
+   на оставшиеся — правки разметки не требуется. */
+@media(max-width:620px){
+  /* Смета должна помещаться в экран целиком, без листания вбок. Прячем три
+     наименее нужные колонки: номер, раздел и единицу — единицу приклеиваем
+     к объёму, получается «58 м²». Остаются наименование, объём, цена и
+     сумма: ровно то, ради чего блок и сделан. */
+  .kp-t{min-width:0;width:100%;font-size:11px}
+  /* Не display:none, а схлопывание в ноль: строки-разделы объединяют ячейки
+     через colspan, и при удалении колонок у обычных строк справа оставалась
+     пустая зона — таблица разъезжалась. */
+  .kp-t .dn,.kp-t .dr,.kp-t .du,
+  .kp-t thead th:nth-child(1),.kp-t thead th:nth-child(2),.kp-t thead th:nth-child(4){
+    width:0;max-width:0;padding:0;font-size:0;overflow:hidden;white-space:nowrap}
+  .kp-t .dq::after{content:" " attr(data-u);color:#9AA0A8}
+  .kp-t td{padding:6px 4px}
+  .kp-t th{padding:6px 4px;font-size:8.8px;letter-spacing:.04em}
+  .kp-t .dm{min-width:0;max-width:none;line-height:1.32}
+  .kp-t .dq,.kp-t .dp,.kp-t .dt{font-size:10.4px}
+  .kp-t tr.ds td{padding:7px 8px;font-size:10px;letter-spacing:.04em}
+  .kp-t tr.ds td:last-child{font-size:11.5px}
+  .kp-t tfoot td{padding:9px 8px;font-size:10.5px}
+  .kp-t tfoot td:last-child{font-size:13px}
+  .kp-t tr.dmore td{font-size:10.5px;padding:5px 8px}
+  .kp-h{padding:12px 13px}
+  .kp-h span{font-size:11px}
+}
+
+/* Совсем узкие телефоны (320–400px): убираем ещё и цену за единицу. Главное
+   на таком экране — что за работа, в каком объёме и сколько стоит строкой.
+   Цена за единицу видна на широком экране и в самой смете после замера. */
+@media(max-width:400px){
+  .kp-t{font-size:10.4px}
+  .kp-t .dp,.kp-t thead th:nth-child(6){
+    width:0;max-width:0;padding:0;font-size:0;overflow:hidden;white-space:nowrap}
+  .kp-t td,.kp-t th{padding:6px 2px}
+  .kp-t .dq,.kp-t .dt{font-size:10px}
+}
 
 .ex-g{display:grid;gap:13px}
 @media(min-width:640px){.ex-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1045,16 +1087,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
           <thead><tr><th>№</th><th>Раздел</th><th>Наименование</th><th>Ед.</th><th>Объём</th><th>Цена</th><th>Сумма</th></tr></thead>
           <tbody>
           <tr class="ds"><td colspan="6">Черновые работы</td><td>1 955 300 ₸</td></tr>
-          <tr><td class="dn">1</td><td class="dr">Демонтаж</td><td class="dm">Снятие старой стяжки (пол до основания)</td><td class="du">м²</td><td class="dq">58</td><td class="dp">6 600</td><td class="dt">382 800</td></tr>
-          <tr><td class="dn">2</td><td class="dr">Выравнивание стен</td><td class="dm">Штукатурка стен (1–3 см)</td><td class="du">м²</td><td class="dq">177</td><td class="dp">2 500</td><td class="dt">442 500</td></tr>
+          <tr><td class="dn">1</td><td class="dr">Демонтаж</td><td class="dm">Снятие старой стяжки (пол до основания)</td><td class="du">м²</td><td class="dq" data-u="м²">58</td><td class="dp">6 600</td><td class="dt">382 800</td></tr>
+          <tr><td class="dn">2</td><td class="dr">Выравнивание стен</td><td class="dm">Штукатурка стен (1–3 см)</td><td class="du">м²</td><td class="dq" data-u="м²">177</td><td class="dp">2 500</td><td class="dt">442 500</td></tr>
           <tr class="dmore"><td colspan="7">…и ещё 10 позиций</td></tr>
           <tr class="ds"><td colspan="6">Чистовые работы</td><td>866 300 ₸</td></tr>
-          <tr><td class="dn">3</td><td class="dr">Стены — Обои</td><td class="dm">Поклейка обоев</td><td class="du">м²</td><td class="dq">177</td><td class="dp">1 900</td><td class="dt">336 300</td></tr>
-          <tr><td class="dn">4</td><td class="dr">Двери и проёмы</td><td class="dm">Установка межкомнатных дверей (базовые)</td><td class="du">шт</td><td class="dq">5</td><td class="dp">23 500</td><td class="dt">117 500</td></tr>
+          <tr><td class="dn">3</td><td class="dr">Стены — Обои</td><td class="dm">Поклейка обоев</td><td class="du">м²</td><td class="dq" data-u="м²">177</td><td class="dp">1 900</td><td class="dt">336 300</td></tr>
+          <tr><td class="dn">4</td><td class="dr">Двери и проёмы</td><td class="dm">Установка межкомнатных дверей (базовые)</td><td class="du">шт</td><td class="dq" data-u="шт">5</td><td class="dp">23 500</td><td class="dt">117 500</td></tr>
           <tr class="dmore"><td colspan="7">…и ещё 5 позиций</td></tr>
           <tr class="ds"><td colspan="6">Санузел под ключ</td><td>1 195 100 ₸</td></tr>
-          <tr><td class="dn">5</td><td class="dr">Основные работы</td><td class="dm">Санузел под ключ: инженерка, гидроизоляция, плитка, сантехника</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">1 022 600</td><td class="dt">1 022 600</td></tr>
-          <tr><td class="dn">6</td><td class="dr">Основные работы</td><td class="dm">Демонтаж и подготовка санузла</td><td class="du">усл.</td><td class="dq">1</td><td class="dp">123 500</td><td class="dt">123 500</td></tr>
+          <tr><td class="dn">5</td><td class="dr">Основные работы</td><td class="dm">Санузел под ключ: инженерка, гидроизоляция, плитка, сантехника</td><td class="du">усл.</td><td class="dq" data-u="усл.">1</td><td class="dp">1 022 600</td><td class="dt">1 022 600</td></tr>
+          <tr><td class="dn">6</td><td class="dr">Основные работы</td><td class="dm">Демонтаж и подготовка санузла</td><td class="du">усл.</td><td class="dq" data-u="усл.">1</td><td class="dp">123 500</td><td class="dt">123 500</td></tr>
           <tr class="dmore"><td colspan="7">…и ещё 1 позиция</td></tr>
           </tbody>
           <tfoot><tr><td colspan="6">Итого по смете</td><td>4 016 700 ₸</td></tr></tfoot>
