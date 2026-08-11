@@ -901,27 +901,37 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .ex-s{margin-top:auto;padding-top:12px;font-size:18px;font-weight:900;color:#0A0D12;
   font-variant-numeric:tabular-nums;border-top:1px solid rgba(10,13,18,.07)}
 
-.ex-cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;
-  margin-top:clamp(22px,3vw,34px);padding-top:clamp(20px,2.6vw,28px);
-  border-top:1px solid rgba(10,13,18,.10)}
-.ex-cta p{flex:1;min-width:260px;margin:0;font-size:15px;line-height:1.6;color:#3A4049}
-/* Вход в квиз сразу после сметы. Сама форма стоит в самом низу страницы —
-   доскроллить до неё 21 экран. Здесь человек только что увидел, как считается
-   цена, и это лучший момент спросить объект. Клик по варианту отвечает на
-   первый вопрос настоящего квиза и переносит к нему — второй формы на
-   странице не появляется, дублировать логику отправки не нужно. */
-.qs-o-g{display:grid;gap:8px;flex:1;min-width:250px;
-  grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
-.qs-o{text-align:left;padding:12px 14px;border-radius:12px;font:inherit;font-size:14px;
-  font-weight:600;color:#0A0D12;background:#fff;cursor:pointer;
-  border:1px solid rgba(10,13,18,.12);transition:border-color .2s,transform .2s,box-shadow .2s;
-  position:relative;padding-right:34px}
-.qs-o::after{content:"→";position:absolute;right:13px;top:50%;transform:translate(-5px,-50%);
+/* Вход в квиз после сметы. Белые кнопки на светлой секции не читались как
+   заявка — выглядели фильтром. Теперь это тёмная панель с «Шаг 1 из 4» и
+   полосой прогресса: сразу видно, что начинается расчёт, а не список ссылок.
+   Кнопки повторяют вид вариантов в самом квизе, чтобы переход был узнаваем. */
+.qs{margin-top:clamp(26px,3.4vw,42px);background:#0A0D12;border-radius:22px;
+  padding:clamp(22px,2.8vw,34px);display:grid;gap:clamp(20px,2.6vw,34px);
+  box-shadow:0 40px 90px -55px rgba(10,13,18,.9)}
+@media(min-width:900px){.qs{grid-template-columns:minmax(0,360px) minmax(0,1fr);align-items:center}}
+.qs-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.qs-step{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--brass);white-space:nowrap}
+.qs-bar{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.10);overflow:hidden}
+.qs-bar i{display:block;height:100%;width:25%;border-radius:4px;
+  background:linear-gradient(90deg,var(--brass3),var(--brass))}
+.qs-l h3{margin:0 0 10px;color:#fff;font-size:clamp(21px,2.4vw,27px);letter-spacing:-.02em;line-height:1.15}
+.qs-l p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.55}
+/* Цена замера: было «ни к чему не обязывает» — звучало как уговаривание.
+   Зачёркнутая цена говорит то же самое, но фактом, а не обещанием. */
+.qs-free{display:inline-flex;align-items:baseline;gap:6px;margin-top:16px;padding:7px 14px;
+  border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.02em;
+  color:#0A0D12;background:var(--brass)}
+.qs-free s{opacity:.5;font-weight:600;text-decoration-thickness:1.5px}
+.qs-free b{font-size:15px;font-weight:900}
+.qs-o-g{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.qs-o{text-align:left;padding:14px 34px 14px 15px;border-radius:13px;font:inherit;font-size:14.5px;
+  font-weight:600;color:#0A0D12;background:#fff;cursor:pointer;border:1px solid transparent;
+  position:relative;transition:transform .2s,box-shadow .2s}
+.qs-o::after{content:"→";position:absolute;right:14px;top:50%;transform:translate(-5px,-50%);
   color:var(--brass3);font-weight:700;opacity:0;transition:opacity .2s,transform .2s}
-.qs-o:hover{border-color:var(--brass3);transform:translateY(-2px);
-  box-shadow:0 14px 26px -18px rgba(10,13,18,.5)}
+.qs-o:hover{transform:translateY(-2px);box-shadow:0 14px 26px -14px rgba(0,0,0,.8)}
 .qs-o:hover::after{opacity:1;transform:translate(0,-50%)}
-.ex-cta p b{display:inline-block;margin-top:8px;color:#0A0D12}
 .vcap b{font-size:15px;font-weight:700;color:#fff}
 .vcap span{font-size:12.6px;color:rgba(255,255,255,.72);line-height:1.45}
 
@@ -1147,8 +1157,13 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px}
       <article class="ex"><span class="ex-t">Комната · косметика</span><b class="ex-a">16 м²</b><span class="ex-p">10 позиций: обои, пол, плинтусы</span><b class="ex-s">≈ 330 тыс ₸</b></article>
     </div>
 
-    <div class="ex-cta rv rv-d2">
-      <p>Ваш объём по площади не угадать — приедем, замерим и посчитаем так же, по позициям. Замер по Караганде бесплатный.<br><b>С чего начнём?</b></p>
+    <div class="qs rv rv-d2">
+      <div class="qs-l">
+        <div class="qs-top"><span class="qs-step">Шаг 1 из 4</span><div class="qs-bar"><i></i></div></div>
+        <h3 class="d">Посчитаем смету по вашему объекту</h3>
+        <p>Четыре коротких вопроса — и инженер приедет на бесплатный замер. Посчитаем так же, по позициям.</p>
+        <span class="qs-free">Замер <s>15 000 ₸</s> <b>0 ₸</b></span>
+      </div>
       <div class="qs-o-g"><button type="button" class="qs-o" data-q="Квартира — вторичка">Квартира — вторичка</button><button type="button" class="qs-o" data-q="Квартира в новостройке">Квартира в новостройке</button><button type="button" class="qs-o" data-q="Коммерция: офис, магазин">Коммерция: офис, магазин</button><button type="button" class="qs-o" data-q="Отдельный вид работ">Отдельный вид работ</button><button type="button" class="qs-o" data-q="Только демонтаж">Только демонтаж</button></div>
     </div>
   </div>
