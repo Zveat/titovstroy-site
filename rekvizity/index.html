@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="index,follow">
+  <title>Реквизиты — ТОО «TITOVSTROY»</title>
+  <style>
+    @font-face{font-family:Onest;src:url(/fonts/Onest-cyr.woff2) format("woff2");font-display:swap}
+    @font-face{font-family:Unbounded;src:url(/fonts/Unbounded-cyr.woff2) format("woff2");font-display:swap}
+    :root{color-scheme:dark;--bg:#0a0d12;--panel:#161b25;--text:#f5f2ec;--muted:#aab1be;--accent:#cbe840;--line:#2b3442}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 Onest,Arial,sans-serif}
+    a{color:var(--accent)}.wrap{width:min(880px,calc(100% - 40px));margin:auto}.top{padding:26px 0;border-bottom:1px solid var(--line)}.brand{color:var(--text);font:700 20px Unbounded,Arial,sans-serif;text-decoration:none}.brand b{color:var(--accent)}main{padding:66px 0 78px}h1,h2{font-family:Unbounded,Arial,sans-serif;line-height:1.2}h1{font-size:clamp(28px,5vw,46px);margin:0 0 18px}h2{font-size:20px;margin:38px 0 12px}.lead{font-size:20px;color:var(--muted);max-width:720px}.card{margin-top:34px;padding:28px 30px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}ul{padding-left:22px}li+li{margin-top:9px}.note{color:var(--muted);font-size:14px}.footer{padding:28px 0;background:#10141c;border-top:1px solid var(--line);color:var(--muted)}
+    /* Таблица реквизитов: подписи слева, значения моноширинно — счета и БИК
+       удобнее сверять и копировать, когда цифры выровнены. */
+    .rq{width:100%;border-collapse:collapse;margin-top:4px}
+    .rq td{padding:9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+    .rq tr:last-child td{border-bottom:0}
+    .rq td:first-child{color:var(--muted);width:190px;padding-right:18px}
+    .rq b{font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+    @media(max-width:600px){body{font-size:16px}.wrap{width:min(100% - 28px,880px)}main{padding:40px 0 52px}.card{padding:21px 19px}
+      .rq td{display:block;border:0;padding:2px 0}.rq td:first-child{width:auto;font-size:14px}
+      .rq tr{display:block;padding:11px 0;border-bottom:1px solid var(--line)}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="wrap"><a class="brand" href="/">Titov<b>Stroy</b></a></div></header>
+  <main class="wrap">
+    <h1>Реквизиты</h1>
+    <p class="lead">Полные данные компании для договоров, счетов и оплаты. Работаем официально: договор, смета по позициям, оплата за принятые этапы.</p>
+
+    <section class="card">
+      <h2>Организация</h2>
+      <table class="rq">
+        <tr><td>Наименование</td><td><b>ТОО «TITOVSTROY»</b></td></tr>
+        <tr><td>БИН</td><td><b>231040002769</b></td></tr>
+        <tr><td>Юридический адрес</td><td><b>Казахстан, Карагандинская область, Караганда,<br>район им. Казыбек би, улица Кирпичная, дом 8г</b></td></tr>
+        <tr><td>Вид деятельности</td><td><b>Ремонтно-отделочные работы</b></td></tr>
+      </table>
+
+      <h2>Банковские реквизиты</h2>
+      <table class="rq">
+        <tr><td>Банк</td><td><b>АО «Kaspi Bank»</b></td></tr>
+        <tr><td>БИК</td><td><b>CASPKZKA</b></td></tr>
+        <tr><td>Номер счёта (ИИК)</td><td><b>KZ38722S000030058973</b></td></tr>
+      </table>
+      <table class="rq" style="margin-top:22px">
+        <tr><td>Банк</td><td><b>АО «Народный Банк Казахстана»</b></td></tr>
+        <tr><td>БИК</td><td><b>HSBKKZKX</b></td></tr>
+        <tr><td>Номер счёта (ИИК)</td><td><b>KZ72601A191028514261</b></td></tr>
+      </table>
+
+      <h2>Контакты</h2>
+      <p>Замер и вопросы по работам: <a href="tel:+77059262139">+7 705 926 21 39</a><br>
+         Переписка: <a href="https://wa.me/77079824915" target="_blank" rel="noopener">WhatsApp +7 707 982 49 15</a></p>
+
+      <h2>О ценах на сайте</h2>
+      <p>Цены и сроки, указанные на сайте, приведены для примера и не являются публичной офертой. Точная стоимость определяется после бесплатного замера, фиксируется сметой по позициям и договором.</p>
+    </section>
+    <p class="note">Данные актуальны на 11 августа 2026 года.</p>
+  </main>
+  <footer class="footer"><div class="wrap"><a href="/">На главную</a> · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/rekvizity/">Реквизиты</a></div></footer>
+</body>
+</html>
