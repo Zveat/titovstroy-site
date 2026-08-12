@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- lastmod — сигнал роботу, что страница переписана. Он нужен из-за истории
+     домена: на titovstroy.kz раньше стояла ERP, она попала в индекс, и Яндекс
+     ещё показывает её заголовок вместо посадочной. Дату держим в актуальном
+     состоянии при заметных правках текста — иначе сигнал перестаёт работать. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://titovstroy.kz/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://titovstroy.kz/vtorichka/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/novostroyki/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/kommercia/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/sanuzel/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/demontazh/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/ceny/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://titovstroy.kz/privacy/</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://titovstroy.kz/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://titovstroy.kz/vtorichka/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/novostroyki/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/kommercia/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/sanuzel/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/demontazh/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/ceny/</loc><lastmod>2026-08-11</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://titovstroy.kz/privacy/</loc><lastmod>2026-08-11</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://titovstroy.kz/rekvizity/</loc><lastmod>2026-08-11</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
 </urlset>
